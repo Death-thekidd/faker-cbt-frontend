@@ -1,0 +1,25 @@
+/* Default style for all screens */
+.custom-width {
+  width: 95%; /* Full width for small screens */
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .w-md-50 {
+    width: 50%;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .w-lg-30 {
+    width: 30%;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .w-xl-70 {
+    width: 70%;
+  }
+}

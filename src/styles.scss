@@ -1,1 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Order */
+@layer reset, primeng;
+
+/* Reset CSS */
+@layer reset {
+  button,
+  input {
+    /* CSS to Reset */
+  }
+}
+
+@font-face {
+  font-family: "Gilroy-ExtraBold";
+  src: url("assets/Gilroy-font-free/Gilroy-ExtraBold.ttf");
+}
+@font-face {
+  font-family: "Gilroy-Light";
+  src: url("assets/Gilroy-font-free/Gilroy-Light.ttf");
+}
+
+@font-face {
+  font-family: "Quicksand-Regular";
+  src: url("assets/Quicksand/static/Quicksand-Regular.ttf");
+}
+
+* {
+  font-family: "Quicksand-Regular" !important;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@import url(assets/css/main.css);
+@import url(assets/plugins/perfect-scrollbar/perfect-scrollbar.css);
+@import url(assets/css/structure.css);

@@ -1,0 +1,82 @@
+<div class="hero-section">
+  <form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="form">
+    <img src="/assets/img/logo1.png" alt="" />
+    <h2>Login</h2>
+
+    <div class="form-group">
+      <label for="emailAddress">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        id="emailAddress"
+        placeholder="username@gmail.com"
+        formControlName="email"
+      />
+      <small
+        *ngIf="
+          myForm.get('email')?.errors &&
+          myForm.get('email')?.errors?.['required'] &&
+          myForm.get('email')?.touched
+        "
+        >Email Address is required</small
+      >
+      <small
+        *ngIf="
+          myForm.get('email')?.errors &&
+          myForm.get('email')?.errors?.['email'] &&
+          myForm.get('email')?.touched
+        "
+        >Email Address should be valid</small
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        placeholder="Password"
+        formControlName="password"
+      />
+      <small
+        *ngIf="
+          myForm.get('password')?.errors &&
+          myForm.get('password')?.errors?.['required'] &&
+          myForm.get('password')?.touched
+        "
+        >Password is required</small
+      >
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="!myForm.valid"
+      class="btn btn-success submit"
+    >
+      Submit
+    </button>
+    <div class="login-options">
+      <button type="button" class="btn btn-primary" (click)="fillForm('admin')">
+        Admin
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="fillForm('instructor')"
+      >
+        Instructor
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="fillForm('student')"
+      >
+        Student
+      </button>
+    </div>
+  </form>
+  <div class="main-img">
+    <img src="/assets/img/mainimg3.png" alt="" />
+  </div>
+</div>

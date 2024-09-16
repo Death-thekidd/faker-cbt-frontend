@@ -1,0 +1,192 @@
+<div class="layout-px-spacing">
+  <div
+    class="seperator-header d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between"
+  >
+    <h4 class="m-2">Users</h4>
+    <!-- Button Trigger New User Modal -->
+    <div class="mb-6 mb-sm-0 mt-sm-0">
+      <button
+        type="button"
+        class="btn btn-success"
+        data-toggle="modal"
+        data-target="#newUserModal"
+      >
+        New User
+      </button>
+    </div>
+  </div>
+
+  <div class="row layout-spacing">
+    <div class="col-lg-12">
+      <div class="statbox widget box box-shadow">
+        <div class="widget-content widget-content-area">
+          <table id="individual-col-search" class="table table-hover">
+            <thead>
+              <tr>
+                <th class="text-center">#</th>
+                <th>Name</th>
+                <th>School ID</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th class="text-center dt-no-sorting">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center">1</td>
+                <td>Test Admin</td>
+                <td>#787898</td>
+                <td>mail.com</td>
+                <td>Admin</td>
+                <td><span class="bg-success p-1 rounded-2">Active</span></td>
+                <td class="text-center">
+                  <a
+                    href=""
+                    class="bs-tooltip p-2"
+                    data-toggle="modal"
+                    data-target="#editUserModal"
+                  >
+                    <fa-icon [icon]="icons.faPenToSquare"></fa-icon>
+                  </a>
+                  <a
+                    href=""
+                    class="bs-tooltip p-2"
+                    data-toggle="modal"
+                    data-target="#deleteUserModal"
+                  >
+                    <fa-icon [icon]="icons.faTrash"></fa-icon
+                  ></a>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th class="text-center">#</th>
+                <th>Name</th>
+                <th>School ID</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th class="invisible"></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+      <!-- New User Modal -->
+      <div
+        class="modal animated fadeInRight custo-fadeInRight register-modal"
+        id="newUserModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="newUserModalLabel"
+        aria-hidden="true"
+      >
+        <div
+          class="modal-dialog position-fixed top-0 end-0 h-100 mt-0 mw-100 custom-width w-md-50 w-lg-30"
+          role="document"
+        >
+          <div class="modal-content h-100">
+            <div
+              class="modal-header flex align-itemss-center flex-row justify-content-between"
+              id="newUserModalLabel"
+            >
+              <h4 class="modal-title">New User</h4>
+              <button
+                type="button"
+                class="btn"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                  <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                  <path
+                    d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div class="modal-body overflow-y-auto">
+              <form class="mt-0">
+                <div class="form-floating mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="fname"
+                    placeholder=""
+                  />
+                  <label for="fname"
+                    >First Name <span class="ml-1 text-danger">*</span></label
+                  >
+                </div>
+                <div class="form-floating mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="lname"
+                    placeholder=""
+                  />
+                  <label for="lname"
+                    >Last Name <span class="ml-1 text-danger">*</span></label
+                  >
+                </div>
+                <div class="form-floating mb-3">
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    placeholder="name@example.com"
+                  />
+                  <label for="email"
+                    >Email address
+                    <span class="ml-1 text-danger">*</span></label
+                  >
+                </div>
+                <div class="form-floating mb-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="schoolid"
+                    placeholder=""
+                  />
+                  <label for="schoolid"
+                    >School ID <span class="ml-1 text-danger">*</span></label
+                  >
+                </div>
+                <div class="form-floating mb-3">
+                  <select class="form-control" id="role">
+                    <option value="">Choose Role</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Admin">Instructor</option>
+                    <option value="Admin">Student</option>
+                  </select>
+                  <label for="role"
+                    >Role <span class="ml-1 text-danger">*</span></label
+                  >
+                </div>
+                <div class="form-floating mb-4">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    placeholder="Password"
+                  />
+                  <label for="password"
+                    >Password<span class="ml-1 text-danger">*</span></label
+                  >
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-primary mt-2 mb-2 btn-block"
+                >
+                  Create
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
