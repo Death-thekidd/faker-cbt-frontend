@@ -41,7 +41,9 @@
               "src/assets/plugins/table/datatable/dt-global_style.css",
               "src/assets/plugins/animate/animate.css",
               "src/assets/css/scrollspyNav.css",
-              "src/assets/css/components/custom-modal.css"
+              "src/assets/css/components/custom-modal.css",
+              "node_modules/ng-zorro-antd/ng-zorro-antd.min.css",
+              "node_modules/primeicons/primeicons.css"
             ],
             "scripts": [
               "src/assets/js/libs/jquery-3.1.1.min.js",

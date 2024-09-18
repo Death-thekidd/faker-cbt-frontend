@@ -11,6 +11,7 @@ import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { first } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: NzMessageService
   ) {
     // redirect to home if already logged in
     if (this.authService.currentUserValue) {
@@ -59,11 +60,14 @@ export class LoginComponent implements OnInit {
         },
         (error) => {
           this.loginError = error?.error?.message;
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Login Error',
-            detail: this.loginError as string,
-          });
+          const res = this.messageService.create(
+            'error',
+            this.loginError as string,
+            {
+              nzDuration: 10000,
+            }
+          );
+          console.log(res);
         }
       );
   }

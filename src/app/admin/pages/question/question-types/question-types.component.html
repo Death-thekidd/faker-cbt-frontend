@@ -1,0 +1,44 @@
+<div class="layout-px-spacing">
+  <p-tag severity="success" value="Question Types" />
+  <div class="layout-top-spacing">
+    <div class="card">
+      <p-table
+        class="tw-w-[100%]"
+        [value]="questionTypes"
+        [lazy]="true"
+        [paginator]="true"
+        [rows]="10"
+        [totalRecords]="totalRecords"
+        [loading]="loading"
+        (onLazyLoad)="loadData($event.first ?? 0, $event.rows ?? 10)"
+        [responsiveLayout]="'scroll'"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th class="tw-font-bold" *ngFor="let col of cols">
+              {{ col.header }}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-questionType>
+          <tr>
+            <td *ngFor="let col of cols">{{ questionType[col.field] }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td [attr.colspan]="cols.length">No records found</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="loading">
+          <tr>
+            <td [attr.colspan]="cols.length">
+              <p-skeleton></p-skeleton>
+              <!-- Skeleton loader -->
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>

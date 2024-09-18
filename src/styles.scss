@@ -1,15 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* Order */
-@layer reset, primeng;
-
-/* Reset CSS */
-@layer reset {
-  button,
-  input {
-    /* CSS to Reset */
-  }
-}
+/* @tailwind base; */
+@tailwind components;
+@tailwind utilities;
 
 @font-face {
   font-family: "Gilroy-ExtraBold";
@@ -26,7 +19,6 @@
 }
 
 * {
-  font-family: "Quicksand-Regular" !important;
   margin: 0;
   padding: 0;
   box-sizing: border-box;

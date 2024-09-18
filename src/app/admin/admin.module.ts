@@ -25,11 +25,26 @@ import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminComponent } from './admin.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
-import { UsersComponent } from './pages/users/users.component';
+import { UsersComponent } from './pages/user/users/users.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { QuestionsComponent } from './pages/question/questions/questions.component';
+import { TestComponent } from './pages/test/test.component';
+import { QuestionTypesComponent } from './pages/question/question-types/question-types.component';
+import { SkeletonModule } from 'primeng/skeleton';
+import { TagModule } from 'primeng/tag';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
-  declarations: [AdminComponent, AdminDashboardComponent, UsersComponent],
+  declarations: [
+    AdminComponent,
+    AdminDashboardComponent,
+    UsersComponent,
+    QuestionsComponent,
+    TestComponent,
+    QuestionTypesComponent,
+  ],
   imports: [
     CommonModule,
     AdminRoutingModule,
@@ -56,6 +71,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     NzStepsModule,
     AdminRoutingModule,
     FontAwesomeModule,
+    SkeletonModule,
+    TagModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
   ],
   providers: [NzMessageService, DatePipe, MessageService],
 })

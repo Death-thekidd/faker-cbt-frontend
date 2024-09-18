@@ -1,0 +1,69 @@
+<div class="layout-px-spacing">
+  <p-tag severity="success" value="Manage Questions" />
+  <div class="layout-top-spacing">
+    <div class="card">
+      <p-table
+        #dt1
+        [value]="questions"
+        dataKey="code"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="loading"
+        [paginator]="true"
+        [globalFilterFields]="[
+          'name',
+          'department',
+          'level',
+          'semester',
+          'questiontype'
+        ]"
+      >
+        <ng-template pTemplate="caption">
+          <div class="tw-flex">
+            <p-button
+              label="Clear"
+              [outlined]="true"
+              icon="pi pi-filter-slash"
+              (click)="clear(dt1)"
+            />
+            <p-iconfield iconPosition="left" class="tw-ml-auto">
+              <p-inputicon styleClass="pi pi-search" />
+              <input
+                pInputText
+                type="text"
+                (input)="filterGlobal($event)"
+                placeholder="Search keyword"
+              />
+            </p-iconfield>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let col of cols" style="min-width: 10rem">
+              <div class="tw-flex tw-items-center">
+                {{ col.header }}
+                <p-columnFilter
+                  type="text"
+                  field="{{ col.field }}"
+                  display="menu"
+                />
+              </div>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-question>
+          <tr>
+            <td *ngFor="let col of cols">
+              {{ question[col.field] }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td [attr.colspan]="cols.length">No questions found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
