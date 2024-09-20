@@ -42,4 +42,23 @@ export class AdminComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
+  isChildRouteActive(dropdownId: string): boolean {
+    switch (dropdownId) {
+      case 'managedashboard':
+        return this.router.isActive('/admin/dashboard', true);
+      case 'manageusers':
+        return (
+          this.router.isActive('/admin/users', true) ||
+          this.router.isActive('/admin/users-group', true)
+        );
+      case 'managequestions':
+        return (
+          this.router.isActive('/admin/questions', true) ||
+          this.router.isActive('/admin/question-types', true)
+        );
+      default:
+        return false;
+    }
+  }
 }

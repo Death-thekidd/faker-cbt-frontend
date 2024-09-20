@@ -3,6 +3,8 @@ import { QuestionService } from '../../../../services/question.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Response } from '../../../../classes/types/response';
 import { Table } from 'primeng/table';
+import { Router } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-questions',
@@ -14,19 +16,23 @@ export class QuestionsComponent implements OnInit {
   loading: boolean = true;
   totalRecords: number = 0;
   cols!: any[];
+  selectedQuestions!: any[] | null;
+  question!: any;
 
   @ViewChild('dt1') dt1!: Table;
   constructor(
     private questionService: QuestionService,
-    private message: NzMessageService
+    private message: NzMessageService,
+    private router: Router,
+    private confirmationService: ConfirmationService
   ) {}
   ngOnInit(): void {
     this.cols = [
-      { field: 'code', header: 'CODE' },
-      { field: 'name', header: 'NAME' },
-      { field: 'level', header: 'LEVEL' },
-      { field: 'department', header: 'DEPARTMENT' },
-      { field: 'semester', header: 'SEMESTER ' },
+      { field: 'course', header: 'Course' },
+      { field: 'name', header: 'Name' },
+      { field: 'level', header: 'Level' },
+      { field: 'department', header: 'Department' },
+      { field: 'semester', header: 'Semester ' },
       { field: 'questiontype', header: 'Question Type' },
     ];
     this.loadData(0, 10);
@@ -59,5 +65,46 @@ export class QuestionsComponent implements OnInit {
     // You may need to adjust this if you're using a different approach
     // For example, you might want to use a ViewChild to reference dt1
     this.dt1.filterGlobal(value, 'contains');
+  }
+  openNew() {
+    this.router.navigate(['/add-question']);
+  }
+
+  deleteSelectedQuestions() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete the selected questions?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.questions = this.questions.filter(
+          (val) => !this.selectedQuestions?.includes(val)
+        );
+        this.selectedQuestions = null;
+        this.message.create('success', 'Questions Deleted', {
+          nzDuration: 7000,
+        });
+      },
+    });
+  }
+
+  editQuestion(question: any) {
+    // this.product = { ...product };
+    // this.productDialog = true;
+    this.router.navigate(['/edit-question']);
+  }
+
+  deleteQuestion(question: any) {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete ' + question.name + '?',
+      header: 'Confirm',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.questions = this.questions.filter((val) => val.id !== question.id);
+        this.question = {};
+        this.message.create('success', 'Product Deleted', {
+          nzDuration: 7000,
+        });
+      },
+    });
   }
 }

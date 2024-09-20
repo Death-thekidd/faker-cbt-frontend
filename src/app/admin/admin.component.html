@@ -838,7 +838,9 @@
           <a
             href="#dashboard"
             data-toggle="collapse"
-            aria-expanded="true"
+            [attr.aria-expanded]="
+              isChildRouteActive('managedashboard') ? 'true' : 'false'
+            "
             class="dropdown-toggle"
           >
             <div class="">
@@ -1349,7 +1351,9 @@
           <a
             href="#questionbank"
             data-toggle="collapse"
-            aria-expanded="false"
+            [attr.aria-expanded]="
+              isChildRouteActive('managequestions') ? 'true' : 'false'
+            "
             class="dropdown-toggle"
           >
             <div class="">
@@ -1480,7 +1484,9 @@
           <a
             href="#manageusers"
             data-toggle="collapse"
-            aria-expanded="false"
+            [attr.aria-expanded]="
+              isChildRouteActive('manageusers') ? 'true' : 'false'
+            "
             class="dropdown-toggle"
           >
             <div class="">

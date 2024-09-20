@@ -19,7 +19,7 @@ import { ButtonModule } from 'primeng/button';
 import { EditorModule } from 'primeng/editor';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ListboxModule } from 'primeng/listbox';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { NzTransferModule } from 'ng-zorro-antd/transfer';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { AdminRoutingModule } from './admin-routing.module';
@@ -35,6 +35,11 @@ import { TagModule } from 'primeng/tag';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { ToolbarModule } from 'primeng/toolbar';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { SelectModule } from 'primeng/select';
 
 @NgModule({
   declarations: [
@@ -76,7 +81,12 @@ import { InputTextModule } from 'primeng/inputtext';
     IconFieldModule,
     InputIconModule,
     InputTextModule,
+    ToolbarModule,
+    DialogModule,
+    ConfirmDialogModule,
+    RadioButtonModule,
+    SelectModule,
   ],
-  providers: [NzMessageService, DatePipe, MessageService],
+  providers: [NzMessageService, DatePipe, MessageService, ConfirmationService],
 })
 export class AdminModule {}
