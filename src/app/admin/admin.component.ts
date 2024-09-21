@@ -54,8 +54,28 @@ export class AdminComponent implements OnInit {
         );
       case 'managequestions':
         return (
-          this.router.isActive('/admin/questions', true) ||
-          this.router.isActive('/admin/question-types', true)
+          this.router.isActive('/admin/question/manage-questions', true) ||
+          this.router.isActive('/admin/question/question-types', true) ||
+          this.router.isActive('/admin/question/add', true) ||
+          this.router.isActive('/admin/question/add-bulk', true) ||
+          this.router.isActive('/admin/question/edit/:questionId', true)
+        );
+      case 'managecategories':
+        return (
+          this.router.isActive('/admin/category/manage-semesters', true) ||
+          this.router.isActive('/admin/category/manage-sessions', true) ||
+          this.router.isActive('/admin/category/manage-levels', true) ||
+          this.router.isActive('/admin/category/manage-departments', true) ||
+          this.router.isActive('/admin/category/manage-faculties', true) ||
+          this.router.isActive('/admin/category/manage-courses', true)
+        );
+      case 'manageexams':
+        return (
+          this.router.isActive('/admin/exam/manage-exams', true) ||
+          this.router.isActive('/admin/exam/add-exam', true) ||
+          this.router.isActive('/admin/exam/edit-exam/:examId', true) ||
+          this.router.isActive('/admin/exam/exam-types', true) ||
+          this.router.isActive('/admin/exam/exam-results', true)
         );
       default:
         return false;

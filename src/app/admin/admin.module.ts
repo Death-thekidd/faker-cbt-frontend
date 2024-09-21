@@ -40,6 +40,20 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectModule } from 'primeng/select';
+import { AddQuestionComponent } from './pages/question/add-question/add-question.component';
+import { AddBulkQuestionsComponent } from './pages/question/add-bulk-questions/add-bulk-questions.component';
+import { EditQuestionComponent } from './pages/question/edit-question/edit-question.component';
+import { CourseComponent } from './pages/categories/course/course.component';
+import { DepartmentComponent } from './pages/categories/department/department.component';
+import { FacultyComponent } from './pages/categories/faculty/faculty.component';
+import { LevelComponent } from './pages/categories/level/level.component';
+import { SemesterComponent } from './pages/categories/semester/semester.component';
+import { SessionComponent } from './pages/categories/session/session.component';
+import { ExamResultComponent } from './pages/exam/exam-result/exam-result.component';
+import { ExamsComponent } from './pages/exam/exams/exams.component';
+import { ExamTypesComponent } from './pages/exam/exam-types/exam-types.component';
+import { AddExamComponent } from './pages/exam/add-exam/add-exam.component';
+import { EditExamComponent } from './pages/exam/edit-exam/edit-exam.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +63,20 @@ import { SelectModule } from 'primeng/select';
     QuestionsComponent,
     TestComponent,
     QuestionTypesComponent,
+    AddQuestionComponent,
+    AddBulkQuestionsComponent,
+    EditQuestionComponent,
+    CourseComponent,
+    DepartmentComponent,
+    FacultyComponent,
+    LevelComponent,
+    SemesterComponent,
+    SessionComponent,
+    ExamResultComponent,
+    ExamsComponent,
+    ExamTypesComponent,
+    AddExamComponent,
+    EditExamComponent,
   ],
   imports: [
     CommonModule,

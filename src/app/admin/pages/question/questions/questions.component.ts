@@ -13,11 +13,13 @@ import { ConfirmationService } from 'primeng/api';
 })
 export class QuestionsComponent implements OnInit {
   questions!: any[];
+  listQuestions!: any[];
   loading: boolean = true;
   totalRecords: number = 0;
   cols!: any[];
   selectedQuestions!: any[] | null;
   question!: any;
+  expandedRows = {};
 
   @ViewChild('dt1') dt1!: Table;
   constructor(
@@ -46,8 +48,15 @@ export class QuestionsComponent implements OnInit {
     this.loading = true;
     this.questionService.getAll().subscribe(
       (res: Response<any>) => {
-        this.questions = res?.data.slice(first, first + rows);
-        this.totalRecords = res?.data.length;
+        this.questions = res?.data;
+        this.listQuestions = this.questions
+          .slice(first, first + rows)
+          .map((q, index) => ({
+            ...q,
+            options: JSON.parse(q?.options),
+            answer: JSON.parse(q?.answer),
+          }));
+        this.totalRecords = this.questions.length;
         this.loading = false;
       },
       (error) => {
@@ -59,11 +68,9 @@ export class QuestionsComponent implements OnInit {
     );
   }
   filterGlobal(event: Event) {
-    const input = event.target as HTMLInputElement; // Cast to HTMLInputElement
+    const input = event.target as HTMLInputElement;
     const value = input.value;
-    // Assuming dt1 is accessible, otherwise pass it as a parameter
-    // You may need to adjust this if you're using a different approach
-    // For example, you might want to use a ViewChild to reference dt1
+
     this.dt1.filterGlobal(value, 'contains');
   }
   openNew() {
@@ -76,7 +83,7 @@ export class QuestionsComponent implements OnInit {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.questions = this.questions.filter(
+        this.listQuestions = this.listQuestions.filter(
           (val) => !this.selectedQuestions?.includes(val)
         );
         this.selectedQuestions = null;
@@ -99,12 +106,25 @@ export class QuestionsComponent implements OnInit {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.questions = this.questions.filter((val) => val.id !== question.id);
+        this.listQuestions = this.listQuestions.filter(
+          (val) => val.id !== question.id
+        );
         this.question = {};
         this.message.create('success', 'Product Deleted', {
           nzDuration: 7000,
         });
       },
     });
+  }
+
+  expandAll() {
+    this.expandedRows = this.questions.reduce(
+      (acc, q) => (acc[q.name] = true) && acc,
+      {}
+    );
+  }
+
+  collapseAll() {
+    this.expandedRows = {};
   }
 }

@@ -27,12 +27,13 @@
       </p-toolbar>
       <p-table
         #dt1
-        [value]="questions"
+        [value]="listQuestions"
         dataKey="name"
         [rows]="10"
         [rowsPerPageOptions]="[10, 25, 50]"
         [loading]="loading"
         [paginator]="true"
+        [expandedRowKeys]="expandedRows"
         [globalFilterFields]="[
           'name',
           'department',
@@ -64,9 +65,24 @@
               />
             </p-iconfield>
           </div>
+          <div class="tw-flex tw-flex-wrap tw-justify-end tw-gap-2">
+            <p-button
+              label="Expand All"
+              icon="pi pi-plus"
+              text
+              (onClick)="expandAll()"
+            />
+            <p-button
+              label="Collapse All"
+              icon="pi pi-minus"
+              text
+              (onClick)="collapseAll()"
+            />
+          </div>
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
+            <th style="width: 5rem"></th>
             <th style="width: 4rem">
               <p-tableHeaderCheckbox />
             </th>
@@ -83,8 +99,19 @@
             <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-question>
+        <ng-template pTemplate="body" let-question let-expanded="expanded">
           <tr>
+            <td>
+              <p-button
+                type="button"
+                pRipple
+                [pRowToggler]="question"
+                [text]="true"
+                [rounded]="true"
+                [plain]="true"
+                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+              />
+            </td>
             <td>
               <p-tableCheckbox [value]="question" />
             </td>
@@ -109,6 +136,42 @@
                 [outlined]="true"
                 (click)="deleteQuestion(question)"
               />
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-question>
+          <tr>
+            <td colspan="10">
+              <div class="p-3">
+                <div
+                  class="w-bg-white tw-border-0 tw-border-l-8 tw-border-solid tw-m-6 tw-p-2 tw-border-green-500"
+                >
+                  <p>{{ question.questionText }}</p>
+                  <small>
+                    <ol type="A">
+                      <li
+                        *ngFor="let option of question.options; let i = index"
+                      >
+                        {{ option }}
+                        <strong>
+                          <i
+                            class="text-success"
+                            *ngIf="question.answer[i] == 1"
+                          >
+                            True
+                          </i>
+                          <i
+                            class="text-danger"
+                            *ngIf="question.answer[i] == 0"
+                          >
+                            False
+                          </i>
+                        </strong>
+                      </li>
+                    </ol>
+                  </small>
+                </div>
+              </div>
             </td>
           </tr>
         </ng-template>
