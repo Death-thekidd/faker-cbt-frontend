@@ -17,6 +17,14 @@
           />
           <p-button
             pRipple
+            severity="success"
+            label="Bulk Add"
+            icon="pi pi-plus"
+            class="tw-mr-2"
+            (click)="bulkAdd()"
+          />
+          <p-button
+            pRipple
             severity="danger"
             label="Delete"
             icon="pi pi-trash"
@@ -44,6 +52,8 @@
         [tableStyle]="{ 'min-width': '75rem' }"
         [(selection)]="selectedQuestions"
         [rowHover]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
       >
         <ng-template pTemplate="caption">
           <div
@@ -162,7 +172,7 @@
                           </i>
                           <i
                             class="text-danger"
-                            *ngIf="question.answer[i] == 0"
+                            *ngIf="question.answer[i] == 2"
                           >
                             False
                           </i>
@@ -179,6 +189,12 @@
           <tr>
             <td [attr.colspan]="cols.length">No questions found.</td>
           </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="flex items-center justify-between">
+            In total there are
+            {{ questions ? questions.length : 0 }} question(s).
+          </div>
         </ng-template>
       </p-table>
       <p-confirmDialog [style]="{ width: '450px' }" />

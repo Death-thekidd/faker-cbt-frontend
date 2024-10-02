@@ -18,6 +18,7 @@ import { SessionComponent } from './pages/categories/session/session.component';
 import { LevelComponent } from './pages/categories/level/level.component';
 import { DepartmentComponent } from './pages/categories/department/department.component';
 import { CourseComponent } from './pages/categories/course/course.component';
+import { EditQuestionComponent } from './pages/question/edit-question/edit-question.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full' },
@@ -57,7 +58,7 @@ const routes: Routes = [
       },
       {
         path: 'question/edit/:questionId',
-        component: AddBulkQuestionsComponent,
+        component: EditQuestionComponent,
         data: { title: 'Edit Question' },
       },
       {
@@ -66,7 +67,7 @@ const routes: Routes = [
         data: { title: 'Manage Exams' },
       },
       {
-        path: 'exam/add-exam',
+        path: 'exam/add',
         component: AddExamComponent,
         data: { title: 'Add Exam' },
       },
@@ -81,7 +82,7 @@ const routes: Routes = [
         data: { title: 'Exam Results' },
       },
       {
-        path: 'exam/edit-exam/:examId',
+        path: 'exam/edit/:examId',
         component: EditExamComponent,
         data: { title: 'Edit Exam' },
       },

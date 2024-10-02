@@ -53,6 +53,7 @@ export class QuestionsComponent implements OnInit {
           .slice(first, first + rows)
           .map((q, index) => ({
             ...q,
+            id: q?._id,
             options: JSON.parse(q?.options),
             answer: JSON.parse(q?.answer),
           }));
@@ -74,7 +75,11 @@ export class QuestionsComponent implements OnInit {
     this.dt1.filterGlobal(value, 'contains');
   }
   openNew() {
-    this.router.navigate(['/add-question']);
+    this.router.navigate(['/admin/question/add']);
+  }
+
+  bulkAdd() {
+    this.router.navigate(['/admin/question/add-bulk']);
   }
 
   deleteSelectedQuestions() {
@@ -83,13 +88,33 @@ export class QuestionsComponent implements OnInit {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.listQuestions = this.listQuestions.filter(
-          (val) => !this.selectedQuestions?.includes(val)
-        );
+        if (this.selectedQuestions) {
+          const deleteRequests = this.selectedQuestions.map((question) =>
+            this.questionService.delete(question.id).subscribe(
+              () => {
+                this.listQuestions = this.listQuestions.filter(
+                  (val) => val.id !== question.id
+                );
+                this.message.create('success', 'Questions Deleted', {
+                  nzDuration: 7000,
+                });
+              },
+              (error) => {
+                this.message.create(
+                  'error',
+                  `Error deleting question: ${error}`,
+                  {
+                    nzDuration: 7000,
+                  }
+                );
+              }
+            )
+          );
+
+          // Optional: If you want to wait for all delete requests to finish
+          // you can use forkJoin from 'rxjs' to handle multiple observables.
+        }
         this.selectedQuestions = null;
-        this.message.create('success', 'Questions Deleted', {
-          nzDuration: 7000,
-        });
       },
     });
   }
@@ -97,7 +122,7 @@ export class QuestionsComponent implements OnInit {
   editQuestion(question: any) {
     // this.product = { ...product };
     // this.productDialog = true;
-    this.router.navigate(['/edit-question']);
+    this.router.navigate(['/admin/question/edit/' + question?.id]);
   }
 
   deleteQuestion(question: any) {
@@ -106,13 +131,22 @@ export class QuestionsComponent implements OnInit {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.listQuestions = this.listQuestions.filter(
-          (val) => val.id !== question.id
+        this.questionService.delete(question.id).subscribe(
+          () => {
+            this.listQuestions = this.listQuestions.filter(
+              (val) => val.id !== question.id
+            );
+            this.question = {};
+            this.message.create('success', 'Question Deleted', {
+              nzDuration: 7000,
+            });
+          },
+          (error) => {
+            this.message.create('error', `Error deleting question: ${error}`, {
+              nzDuration: 7000,
+            });
+          }
         );
-        this.question = {};
-        this.message.create('success', 'Product Deleted', {
-          nzDuration: 7000,
-        });
       },
     });
   }

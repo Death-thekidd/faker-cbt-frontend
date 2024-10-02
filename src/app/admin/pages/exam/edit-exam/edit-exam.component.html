@@ -3,6 +3,262 @@
   <div class="layout-top-spacing">
     <div
       class="card tw-bg-white tw-border tw-border-gray-300 tw-p-8 tw-rounded-lg tw-mb-4"
-    ></div>
+    >
+      <p-stepper [linear]="true">
+        <p-stepper-panel header="Create Exam">
+          <ng-template
+            pTemplate="content"
+            let-nextCallback="nextCallback"
+            let-index="index"
+          >
+            <div class="card-header">
+              <h4 class="header-title">Edit Exam</h4>
+            </div>
+            <div class="col-md-12 card-body order-md-1" *ngIf="!isLoading">
+              <form
+                class="needs-validation"
+                [formGroup]="inputForm"
+                (ngSubmit)="onSubmit(nextCallback)"
+                novalidate=""
+              >
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="ename">Exam name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="ename"
+                      formControlName="ename"
+                      placeholder="e.g ANCILLARY MATHEMATICS I"
+                      value=""
+                      required=""
+                    />
+                    <div *ngIf="submitted && f.ename.errors" class="text-red">
+                      <small *ngIf="f.ename.errors.required">
+                        Valid Exam name is required.</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="course">ExamType</label>
+                    <select
+                      class="custom-select d-block w-100"
+                      id="examtype"
+                      formControlName="examtype"
+                      required=""
+                    >
+                      <option value="">Choose ExamType...</option>
+                      <option
+                        *ngFor="let examtype of examtypes"
+                        value="{{ examtype.id }}"
+                      >
+                        {{ examtype.name }}
+                      </option>
+                    </select>
+                    <div
+                      *ngIf="submitted && f.examtype.errors"
+                      class="text-red"
+                    >
+                      <small *ngIf="f.examtype.errors.required">
+                        Please select a valid ExamType.</small
+                      >
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="session">Session</label>
+                    <select
+                      class="custom-select d-block w-100"
+                      id="session"
+                      formControlName="session"
+                      required=""
+                    >
+                      <option value="">Choose Session...</option>
+                      <option
+                        *ngFor="let session of sessions"
+                        value="{{ session.id }}"
+                      >
+                        {{ session.name }}
+                      </option>
+                    </select>
+                    <div *ngIf="submitted && f.session.errors" class="text-red">
+                      <small *ngIf="f.session.errors.required">
+                        Please select a valid Session.</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="course">Course name</label>
+                    <select
+                      class="custom-select d-block w-100"
+                      id="course"
+                      formControlName="course"
+                      required=""
+                    >
+                      <option value="">Choose Course...</option>
+                      <option
+                        *ngFor="let course of courses"
+                        value="{{ course.id }}"
+                      >
+                        {{ course.name }}
+                      </option>
+                    </select>
+                    <div *ngIf="submitted && f.course.errors" class="text-red">
+                      <small *ngIf="f.course.errors.required">
+                        Please select a valid Course.</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <div class="row">
+                      <div class="col-6">
+                        <label for="schedule">Start Date</label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="startDate"
+                          formControlName="startDate"
+                          placeholder="Enter Start Date"
+                          value=""
+                          required=""
+                        />
+                        <div
+                          *ngIf="submitted && f.startDate.errors"
+                          class="text-red"
+                        >
+                          <small *ngIf="f.startDate.errors.required">
+                            Valid Start Date is required.</small
+                          >
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <label for="schedule">End Date</label>
+                        <input
+                          type="date"
+                          class="form-control"
+                          id="endDate"
+                          formControlName="endDate"
+                          placeholder="Enter End Date"
+                          value=""
+                          required=""
+                        />
+                        <div
+                          *ngIf="submitted && f.endDate.errors"
+                          class="text-red"
+                        >
+                          <small *ngIf="f.endDate.errors.required">
+                            Valid End Date is required.</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="duration">Duration</label><br />
+                    <div class="row">
+                      <div class="col-6">
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="hours"
+                          formControlName="hours"
+                          placeholder="Enter Hours"
+                          min="0"
+                          max="23"
+                          step="1"
+                          maxlength="2"
+                          value=""
+                          required=""
+                        />
+                        <div
+                          *ngIf="submitted && f.hours.errors"
+                          class="text-red"
+                        >
+                          <small *ngIf="f.hours.errors.required">
+                            Valid Exam mintes duration is required.</small
+                          >
+                          <small
+                            *ngIf="
+                              inputForm.get('hours')?.hasError('maxlength')
+                            "
+                            >maxlength exceeded</small
+                          >
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="minutes"
+                          formControlName="minutes"
+                          placeholder="Enter Hours"
+                          min="0"
+                          step="1"
+                          maxlength="2"
+                          max="59"
+                          value=""
+                          required=""
+                        />
+                        <div
+                          *ngIf="submitted && f.minutes.errors"
+                          class="text-red"
+                        >
+                          <small *ngIf="f.minutes.errors.required">
+                            Valid Exam hours duration is required.</small
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row"></div>
+
+                <hr class="mb-4" />
+                <button
+                  type="submit"
+                  [disabled]="loading"
+                  class="btn btn-success btn-block tw-w-[100%]"
+                >
+                  <span
+                    *ngIf="loading"
+                    class="spinner-border spinner-border-sm mr-1"
+                  ></span>
+                  Update Exam
+                </button>
+              </form>
+            </div>
+            <div class="card-body text-center p-5" *ngIf="isLoading">
+              <!--<nz-spin nzSimple  [nzSize]="'large'" class="my-5 py-5"></nz-spin>-->
+              <img src="assets/loading.gif" width="200px" class="my-5 py-5" />
+            </div>
+          </ng-template>
+        </p-stepper-panel>
+        <p-stepper-panel header="Add Questions">
+          ><ng-template
+            pTemplate="content"
+            let-prevCallback="prevCallback"
+            let-nextCallback="nextCallback"
+            let-index="index"
+          >
+            <app-add-exam-questions [examId]="examId"></app-add-exam-questions>
+            <div class="tw-flex tw-pt-6 tw-justify-between">
+              <p-button
+                label="Back"
+                icon="pi pi-arrow-left"
+                (onClick)="prevCallback.emit()"
+              />
+              <p-button
+                label="Next"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+                (onClick)="nextCallback.emit()"
+              />
+            </div>
+          </ng-template>
+        </p-stepper-panel>
+      </p-stepper>
+    </div>
   </div>
 </div>

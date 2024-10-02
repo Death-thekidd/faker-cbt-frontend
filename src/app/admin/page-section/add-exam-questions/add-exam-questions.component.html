@@ -1,0 +1,76 @@
+<app-loading [isLoading]="isLoading"></app-loading>
+<div class="row" *ngIf="!isLoading">
+  <div class="col-md-6">
+    <p-listbox
+      [options]="questions"
+      class="card card-success"
+      [(ngModel)]="selectedQuestions"
+      [multiple]="true"
+      optionLabel="questionText"
+      filterBy="questionText"
+      [filter]="true"
+      [listStyle]="{ 'max-height': '700px' }"
+    >
+      <ng-template pTemplate="header" style="border-top: 1px solid #218838">
+        Course Question Bank Question Bank
+      </ng-template>
+      <ng-template let-question pTemplate="item">
+        <div class="country-item">
+          {{ question.questionText }}
+          <ol type="A">
+            <li *ngFor="let option of question.options">{{ option }}</li>
+          </ol>
+        </div>
+      </ng-template>
+    </p-listbox>
+  </div>
+  <div class="col-md-6">
+    <div class="mr-1 card-outline card card-success">
+      <div class="card-header">Selected Questions</div>
+      <div class="card-body">
+        <ol type="1">
+          <li *ngFor="let question of selectedQuestions">
+            <div class="country-item">
+              {{ question.questionText }}
+              <ol type="A">
+                <li *ngFor="let option of question.options">{{ option }}</li>
+              </ol>
+            </div>
+          </li>
+        </ol>
+        <button
+          class="btn btn-success btn-block"
+          (click)="addQuestions()"
+          *ngIf="selectedQuestions.length > 0"
+        >
+          Add Question
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<nz-transfer
+      [nzDataSource]="questions"
+      nzShowSearch
+      [nzOperations]="['to right', 'to left']"
+      [nzListStyle]="{ 'width.%': 100, 'height.px': 300 }"
+      [nzRender]="render"
+      [nzFooter]="footer"
+      (nzSelectChange)="select($event)"
+      (nzChange)="change($event)"
+    >
+    <ng-template #render let-question>
+        <div class="">
+            {{question.questionText}}
+            <ol type="A" >
+                <li *ngFor="let option of question.options">{{option}}</li>
+            </ol>
+        </div>
+    </ng-template>
+      <ng-template #footer let-direction>
+        <button nz-button (click)="reload(direction)" [nzSize]="'small'" style="float: right; margin: 5px;">
+          reload
+        </button>
+      </ng-template>
+    </nz-transfer>-->

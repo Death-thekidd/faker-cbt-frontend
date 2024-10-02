@@ -3,6 +3,144 @@
   <div class="layout-top-spacing">
     <div
       class="card tw-bg-white tw-border tw-border-gray-300 tw-p-8 tw-rounded-lg tw-mb-4"
-    ></div>
+    >
+      <div class="row">
+        <div class="col-md-6">
+          <form
+            class="needs-validation"
+            [formGroup]="inputForm"
+            (ngSubmit)="onSubmit()"
+            novalidate=""
+          >
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="course">Course</label>
+                <select
+                  class="custom-select d-block w-100"
+                  id="course"
+                  formControlName="course"
+                  required=""
+                >
+                  <option value="" selected>Choose Course</option>
+                  <option
+                    *ngFor="let course of courses"
+                    value="{{ course.id }}"
+                  >
+                    {{ course.name }}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f.course.errors" class="text-red">
+                  <small *ngIf="f.course.errors.required">
+                    Please select a valid Course.</small
+                  >
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="questionType">Question Type</label>
+                <select
+                  class="custom-select d-block w-100"
+                  id="questionType"
+                  formControlName="questiontype"
+                  required=""
+                >
+                  <option value="">Choose Question Type</option>
+                  <option
+                    *ngFor="let data of questiontypes"
+                    value="{{ data.id }}"
+                  >
+                    {{ data.name }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="submitted && f.questiontype.errors"
+                  class="text-red"
+                >
+                  <small *ngIf="f.questiontype.errors.required">
+                    Please select a valid Question Type.</small
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <!--Question-->
+              <div class="col-md-12">
+                <div class="card card-success card-outline">
+                  <div class="card-header">
+                    <label for="questionText">Question Text</label>
+                  </div>
+                  <div class="card-body p-1" style="display: block">
+                    <textarea
+                      class="form-control"
+                      [rows]="5"
+                      [cols]="30"
+                      pInputTextarea
+                      [autoResize]="true"
+                      formControlName="allQuestions"
+                      (change)="onTextChange()"
+                    ></textarea>
+                    <!--<p-editor formControlName="allQuestions" [style]="{'height':'700px'}" (onTextChange)="onTextChange()"></p-editor>-->
+                    <div
+                      *ngIf="submitted && f.allQuestions.errors"
+                      class="text-red"
+                    >
+                      <small *ngIf="f.allQuestions.errors.required">
+                        Please select a valid Question.</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--View Questions-->
+
+            <button
+              type="submit"
+              [disabled]="loading"
+              class="tw-w-[100%] btn tw-mt-4 btn-block btn-success"
+            >
+              <span
+                *ngIf="loading"
+                class="spinner-border spinner-border-sm mr-1"
+              ></span>
+              Add Question
+            </button>
+          </form>
+        </div>
+
+        <!--Display Questions-->
+        <div class="card col-md-6 card-success card-outline">
+          <div
+            class="card-header tw-flex md:tw-justify-between md:tw-flex-row tw-flex-col"
+          >
+            Preview Question
+            <div class="card-tools">
+              <button
+                (click)="downloadJsonFormat()"
+                class="btn btn-danger tw-mr-1"
+              >
+                <i class="fa fa-file-code-o"></i> Json
+              </button>
+              <button class="btn btn-success">
+                <i class="fa fa-print"></i> Print
+              </button>
+            </div>
+          </div>
+          <div class="card-body" id="showQ" [innerHtml]="questionBody">
+            <!--<ol type="1">
+                  <li *ngFor="let question of formattedQuestion[0]; let i = index">
+                      {{question}}
+                      <ol type="a">
+                          <li *ngFor="let option of formattedQuestion[1][i]">
+                              {{option}}
+                          </li>
+                      </ol>
+                  </li>
+              </ol>-->
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

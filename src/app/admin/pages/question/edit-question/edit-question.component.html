@@ -3,6 +3,438 @@
   <div class="layout-top-spacing">
     <div
       class="card tw-bg-white tw-border tw-border-gray-300 tw-p-8 tw-rounded-lg tw-mb-4"
-    ></div>
+    >
+      <div class="row">
+        <div class="col-md-12 order-md-1">
+          <!--<h4 class="mb-3">Add New Question</h4>-->
+          <form
+            class="needs-validation"
+            [formGroup]="inputForm"
+            (ngSubmit)="onSubmit()"
+            novalidate=""
+          >
+            <div class="row">
+              <div class="col-md-5 mb-3">
+                <label for="course">Course</label>
+                <select
+                  class="custom-select d-block w-100"
+                  id="course"
+                  formControlName="course"
+                  required=""
+                >
+                  <option value="" selected>Choose Course</option>
+                  <option
+                    *ngFor="let course of courses"
+                    value="{{ course.id }}"
+                  >
+                    {{ course.name }}
+                  </option>
+                </select>
+                <div *ngIf="submitted && f.course.errors" class="text-red">
+                  <small *ngIf="f.course.errors.required">
+                    Please select a valid Course.</small
+                  >
+                </div>
+              </div>
+              <div class="col-md-4 mb-3">
+                <label for="questionType">Question Type</label>
+                <select
+                  class="custom-select d-block w-100"
+                  id="questionType"
+                  formControlName="questiontype"
+                  required=""
+                >
+                  <option value="">Choose Question Type</option>
+                  <option
+                    *ngFor="let data of questiontypes"
+                    value="{{ data.id }}"
+                  >
+                    {{ data.name }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="submitted && f.questiontype.errors"
+                  class="text-red"
+                >
+                  <small *ngIf="f.questiontype.errors.required">
+                    Please select a valid Question Type.</small
+                  >
+                </div>
+              </div>
+              <!--<div class="col-md-3 mb-3">
+                <label for="score">Score</label>
+                <input type="text" class="form-control" value="1" id="score" formControlName="score" placeholder="" required="">
+                <div *ngIf="submitted && f.score.errors" class="text-red">
+                  <small *ngIf="f.score.errors.required"> Valid Score required</small>
+                </div>
+              </div>-->
+            </div>
+
+            <div class="row tw-gap-y-4 mt-3">
+              <!--Question-->
+              <div class="col-md-12">
+                <div class="card card-success card-outline">
+                  <div class="card-header">
+                    <label for="questionText">Question Text</label>
+                  </div>
+                  <div class="card-body p-3" style="display: block">
+                    <textarea
+                      class="form-control"
+                      id="questionText"
+                      formControlName="questionText"
+                    ></textarea>
+                    <div
+                      *ngIf="submitted && f.questionText.errors"
+                      class="text-red"
+                    >
+                      <small *ngIf="f.questionText.errors.required">
+                        Please select a valid Question.</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!--Option 1-->
+              <div class="col-md-6">
+                <div class="card card-success">
+                  <div class="card-header">
+                    <h3 class="card-title">Option 1</h3>
+                    <div class="card-tools">
+                      <div class="form-group clearfix">
+                        <div class="icheck-default d-inline">
+                          <b
+                            >Choose and answer
+                            <i class="fa fa-arrow-right"></i>&nbsp;</b
+                          >
+                        </div>
+                        <div class="icheck-primary d-inline">
+                          <input
+                            type="radio"
+                            [value]="1"
+                            name="answer1"
+                            [formControlName]="'answer1'"
+                            id="answer1true"
+                            [checked]="f.answer1.value === 1"
+                          />
+                          <label for="answer1true"> </label>
+                        </div>
+                        <div class="icheck-danger d-inline">
+                          <input
+                            type="radio"
+                            [value]="2"
+                            name="answer1"
+                            [formControlName]="'answer1'"
+                            id="answer1false"
+                            [checked]="f.answer1.value === 2"
+                          />
+                          <label for="answer1false"> Answer </label>
+                          <div
+                            *ngIf="submitted && f.answer1.errors"
+                            class="text-red"
+                          >
+                            <small
+                              *ngIf="f.answer1.errors.required"
+                              style="font-weight: 1000"
+                            >
+                              Please select an Answer.</small
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body" style="display: block">
+                    <textarea
+                      class="form-control"
+                      id="questionText"
+                      formControlName="option1"
+                    ></textarea>
+                    <div *ngIf="submitted && f.option1.errors" class="text-red">
+                      <small *ngIf="f.option1.errors.required">
+                        Please provide an Option.</small
+                      >
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+
+              <!--Option 2-->
+              <div class="col-md-6">
+                <div class="card card-success">
+                  <div class="card-header">
+                    <h3 class="card-title">Option 2</h3>
+                    <div class="card-tools">
+                      <div class="form-group clearfix">
+                        <div class="icheck-default d-inline">
+                          <b
+                            >Choose and answer
+                            <i class="fa fa-arrow-right"></i>&nbsp;</b
+                          >
+                        </div>
+                        <div class="icheck-primary d-inline">
+                          <input
+                            type="radio"
+                            [value]="1"
+                            name="answer2"
+                            formControlName="answer2"
+                            id="answer2true"
+                            [checked]="f?.answer2?.value === 1"
+                          />
+                          <label for="answer2true"> </label>
+                        </div>
+                        <div class="icheck-danger d-inline">
+                          <input
+                            type="radio"
+                            [value]="2"
+                            name="answer2"
+                            formControlName="answer2"
+                            id="answer2false"
+                            [checked]="f.answer2.value === 2"
+                          />
+                          <label for="answer2false"> Answer </label>
+                          <div
+                            *ngIf="submitted && f.answer2.errors"
+                            class="text-red"
+                          >
+                            <small
+                              *ngIf="f.answer2.errors.required"
+                              style="font-weight: 1000"
+                            >
+                              Please select an Answer.</small
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body" style="display: block">
+                    <textarea
+                      class="form-control"
+                      id="questionText"
+                      formControlName="option2"
+                    ></textarea>
+                    <div *ngIf="submitted && f.option2.errors" class="text-red">
+                      <small *ngIf="f.option2.errors.required">
+                        Please provide an Option.</small
+                      >
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+
+              <!--Option 3-->
+              <div class="col-md-6">
+                <div class="card card-success">
+                  <div class="card-header">
+                    <h3 class="card-title">Option 3</h3>
+                    <div class="card-tools">
+                      <div class="form-group clearfix">
+                        <div class="icheck-default d-inline">
+                          <b
+                            >Choose and answer
+                            <i class="fa fa-arrow-right"></i>&nbsp;</b
+                          >
+                        </div>
+                        <div class="icheck-primary d-inline">
+                          <input
+                            type="radio"
+                            [value]="1"
+                            name="answer3"
+                            formControlName="answer3"
+                            id="answer3true"
+                            [checked]="f.answer3.value === 1"
+                          />
+                          <label for="answer3true"> </label>
+                        </div>
+                        <div class="icheck-danger d-inline">
+                          <input
+                            type="radio"
+                            [value]="2"
+                            name="answer3"
+                            formControlName="answer3"
+                            id="answer3false"
+                            [checked]="f.answer3.value === 2"
+                          />
+                          <label for="answer3false"> Answer </label>
+                          <div
+                            *ngIf="submitted && f.answer3.errors"
+                            class="text-red"
+                          >
+                            <small
+                              *ngIf="f.answer3.errors.required"
+                              style="font-weight: 1000"
+                            >
+                              Please select an Answer.</small
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body" style="display: block">
+                    <textarea
+                      class="form-control"
+                      id="questionText"
+                      formControlName="option3"
+                    ></textarea>
+                    <div *ngIf="submitted && f.option3.errors" class="text-red">
+                      <small *ngIf="f.option3.errors.required">
+                        Please provide an Option.</small
+                      >
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+
+              <!--Option 4-->
+              <div class="col-md-6">
+                <div class="card card-success">
+                  <div class="card-header">
+                    <h3 class="card-title">Option 4</h3>
+                    <div class="card-tools">
+                      <div class="form-group clearfix">
+                        <div class="icheck-default d-inline">
+                          <b
+                            >Choose and answer
+                            <i class="fa fa-arrow-right"></i>&nbsp;</b
+                          >
+                        </div>
+                        <div class="icheck-primary d-inline">
+                          <input
+                            type="radio"
+                            [value]="1"
+                            name="answer4"
+                            formControlName="answer4"
+                            id="answer4true"
+                            [checked]="f.answer4.value === 1"
+                          />
+                          <label for="answer4true"> </label>
+                        </div>
+                        <div class="icheck-danger d-inline">
+                          <input
+                            type="radio"
+                            [value]="2"
+                            name="answer4"
+                            formControlName="answer4"
+                            id="answer4false"
+                            [checked]="f.answer4.value === 2"
+                          />
+                          <label for="answer4false"> Answer </label>
+                          <div
+                            *ngIf="submitted && f.answer4.errors"
+                            class="text-red"
+                          >
+                            <small
+                              *ngIf="f.answer4.errors.required"
+                              style="font-weight: 1000"
+                            >
+                              Please select an Answer.</small
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body" style="display: block">
+                    <textarea
+                      class="form-control"
+                      id="questionText"
+                      formControlName="option4"
+                    ></textarea>
+                    <div *ngIf="submitted && f.option4.errors" class="text-red">
+                      <small *ngIf="f.option4.errors.required">
+                        Please provide an Option.</small
+                      >
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+
+              <!--Option 5-->
+              <div class="col-md-6">
+                <div class="card card-success">
+                  <div class="card-header">
+                    <h3 class="card-title">Option 5</h3>
+                    <div class="card-tools">
+                      <div class="form-group clearfix">
+                        <div class="icheck-default d-inline">
+                          <b
+                            >Choose and answer
+                            <i class="fa fa-arrow-right"></i>&nbsp;</b
+                          >
+                        </div>
+                        <div class="icheck-primary d-inline">
+                          <input
+                            type="radio"
+                            [value]="1"
+                            name="answer5"
+                            formControlName="answer5"
+                            id="answer5true"
+                            [checked]="f.answer5.value === 1"
+                          />
+                          <label for="answer5true"> </label>
+                        </div>
+                        <div class="icheck-danger d-inline">
+                          <input
+                            type="radio"
+                            [value]="2"
+                            name="answer5"
+                            formControlName="answer5"
+                            id="answer5false"
+                            [checked]="f.answer5.value === 2"
+                          />
+                          <label for="answer5false"> Answer </label>
+                          <div
+                            *ngIf="submitted && f.answer5.errors"
+                            class="text-red"
+                          >
+                            <small
+                              *ngIf="f.answer5.errors.required"
+                              style="font-weight: 1000"
+                            >
+                              Please select an Answer.</small
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body" style="display: block">
+                    <textarea
+                      class="form-control"
+                      id="questionText"
+                      formControlName="option5"
+                    ></textarea>
+                    <div *ngIf="submitted && f.option5.errors" class="text-red">
+                      <small *ngIf="f.option5.errors.required">
+                        Please provide an Option.</small
+                      >
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              [disabled]="loading"
+              class="tw-mt-4 btn btn-success btn-block tw-w-[100%]"
+            >
+              <span
+                *ngIf="loading"
+                class="spinner-border spinner-border-sm mr-1"
+              ></span>
+              Update Question
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

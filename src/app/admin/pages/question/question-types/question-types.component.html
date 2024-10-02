@@ -1,10 +1,26 @@
 <div class="layout-px-spacing">
+  <p-toast />
   <p-tag severity="success" value="Question Types" />
   <div class="layout-top-spacing">
     <div
       class="card tw-bg-white tw-border tw-border-gray-300 tw-p-8 tw-rounded-lg tw-mb-4"
     >
+      <p-toolbar class="mb-6 gap-2">
+        <ng-template pTemplate="left">
+          <p-button
+            pRipple
+            severity="success"
+            label="New"
+            icon="pi pi-plus"
+            class="tw-mr-2"
+            (click)="openNew()"
+            data-toggle="modal"
+            data-target="#newUserModal"
+          />
+        </ng-template>
+      </p-toolbar>
       <p-table
+        #dt1
         class="tw-w-[100%]"
         [value]="questionTypes"
         [lazy]="true"
@@ -14,6 +30,10 @@
         [loading]="loading"
         (onLazyLoad)="loadData($event.first ?? 0, $event.rows ?? 10)"
         [responsiveLayout]="'scroll'"
+        [rowHover]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+        [globalFilterFields]="['name', 'description']"
       >
         <ng-template pTemplate="header">
           <tr>
@@ -32,6 +52,12 @@
             <td [attr.colspan]="cols.length">No records found</td>
           </tr>
         </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="flex items-center justify-between">
+            In total there are
+            {{ questionTypes ? questionTypes.length : 0 }} question type(s).
+          </div>
+        </ng-template>
         <ng-template pTemplate="loading">
           <tr>
             <td [attr.colspan]="cols.length">
@@ -44,3 +70,61 @@
     </div>
   </div>
 </div>
+
+<p-dialog
+  [(visible)]="questionTypeDialog"
+  [style]="{ width: '450px' }"
+  header="Question Type Details"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="flex flex-col gap-6">
+      <div>
+        <label for="name" class="block font-bold mb-3">Name</label>
+        <input
+          type="text"
+          pInputText
+          id="name"
+          [(ngModel)]="questionType.name"
+          required
+          autofocus
+          fluid
+        />
+        <small class="text-red-500" *ngIf="submitted && !questionType.name"
+          >Name is required.</small
+        >
+      </div>
+      <div>
+        <label for="description" class="block font-bold mb-3"
+          >Description</label
+        >
+        <textarea
+          id="description"
+          pInputTextarea
+          [(ngModel)]="questionType.description"
+          required
+          rows="3"
+          cols="20"
+          fluid
+        ></textarea>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      [text]="true"
+      (click)="hideDialog()"
+    />
+    <p-button
+      pRipple
+      label="Save"
+      icon="pi pi-check"
+      (click)="saveQuestionType()"
+    />
+  </ng-template>
+</p-dialog>

@@ -3,6 +3,165 @@
   <div class="layout-top-spacing">
     <div
       class="card tw-bg-white tw-border tw-border-gray-300 tw-p-8 tw-rounded-lg tw-mb-4"
-    ></div>
+    >
+      <p-toolbar class="mb-6 gap-2">
+        <ng-template pTemplate="left">
+          <p-button
+            pRipple
+            severity="success"
+            label="New"
+            icon="pi pi-plus"
+            class="tw-mr-2"
+            (click)="openNew()"
+          />
+          <p-button
+            pRipple
+            severity="danger"
+            label="Delete"
+            icon="pi pi-trash"
+            (click)="deleteSelectedExams()"
+            [disabled]="!selectedExams || !selectedExams.length"
+          />
+        </ng-template>
+      </p-toolbar>
+      <p-table
+        #dt1
+        [value]="listExams"
+        dataKey="name"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="loading"
+        [paginator]="true"
+        [expandedRowKeys]="expandedRows"
+        [globalFilterFields]="[
+          'name',
+          'course',
+          'level',
+          'department',
+          'semester',
+          'session',
+          'faculty',
+          'startDate',
+          'duration'
+        ]"
+        [tableStyle]="{ 'min-width': '75rem' }"
+        [(selection)]="selectedExams"
+        [rowHover]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+      >
+        <ng-template pTemplate="caption">
+          <div
+            class="tw-flex tw-flex-col md:tw-flex-row tw-justify-center tw-items-start tw-gap-y-2"
+          >
+            <p-button
+              label="Clear"
+              [outlined]="true"
+              icon="pi pi-filter-slash"
+              (click)="clear(dt1)"
+            />
+            <p-iconfield iconPosition="left" class="md:tw-ml-auto">
+              <p-inputicon styleClass="pi pi-search" />
+              <input
+                pInputText
+                type="text"
+                (input)="filterGlobal($event)"
+                placeholder="Search keyword"
+              />
+            </p-iconfield>
+          </div>
+          <div class="tw-flex tw-flex-wrap tw-justify-end tw-gap-2">
+            <p-button
+              label="Expand All"
+              icon="pi pi-plus"
+              text
+              (onClick)="expandAll()"
+            />
+            <p-button
+              label="Collapse All"
+              icon="pi pi-minus"
+              text
+              (onClick)="collapseAll()"
+            />
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 5rem"></th>
+            <th style="width: 4rem">
+              <p-tableHeaderCheckbox />
+            </th>
+            <th *ngFor="let col of cols" style="min-width: 10rem">
+              <div class="tw-flex tw-items-center">
+                {{ col.header }}
+                <p-columnFilter
+                  type="text"
+                  field="{{ col.field }}"
+                  display="menu"
+                />
+              </div>
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-exam let-expanded="expanded">
+          <tr>
+            <td>
+              <p-button
+                type="button"
+                pRipple
+                [pRowToggler]="exam"
+                [text]="true"
+                [rounded]="true"
+                [plain]="true"
+                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+              />
+            </td>
+            <td>
+              <p-tableCheckbox [value]="exam" />
+            </td>
+            <td *ngFor="let col of cols">
+              {{ exam[col.field] }}
+            </td>
+            <td>
+              <p-button
+                pRipple
+                icon="pi pi-pencil"
+                class="tw-mr-2"
+                [rounded]="true"
+                [outlined]="true"
+                severity="success"
+                (click)="editExam(exam)"
+              />
+              <p-button
+                pRipple
+                icon="pi pi-trash"
+                severity="danger"
+                [rounded]="true"
+                [outlined]="true"
+                (click)="deleteExam(exam)"
+              />
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-exam>
+          <tr>
+            <td colspan="10"></td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td [attr.colspan]="cols.length">No exams found.</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="flex items-center justify-between">
+            In total there are
+            {{ exams ? exams.length : 0 }} exam(s).
+          </div>
+        </ng-template>
+      </p-table>
+      <p-confirmDialog [style]="{ width: '450px' }" />
+    </div>
   </div>
 </div>

@@ -54,6 +54,12 @@ import { ExamsComponent } from './pages/exam/exams/exams.component';
 import { ExamTypesComponent } from './pages/exam/exam-types/exam-types.component';
 import { AddExamComponent } from './pages/exam/add-exam/add-exam.component';
 import { EditExamComponent } from './pages/exam/edit-exam/edit-exam.component';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { RippleModule } from 'primeng/ripple';
+import { StepperModule } from 'primeng/stepper';
+import { AddExamQuestionsComponent } from './page-section/add-exam-questions/add-exam-questions.component';
+import { LoadingComponent } from './page-section/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +83,8 @@ import { EditExamComponent } from './pages/exam/edit-exam/edit-exam.component';
     ExamTypesComponent,
     AddExamComponent,
     EditExamComponent,
+    AddExamQuestionsComponent,
+    LoadingComponent,
   ],
   imports: [
     CommonModule,
@@ -109,12 +117,21 @@ import { EditExamComponent } from './pages/exam/edit-exam/edit-exam.component';
     IconFieldModule,
     InputIconModule,
     InputTextModule,
+    InputNumberModule,
     ToolbarModule,
     DialogModule,
     ConfirmDialogModule,
     RadioButtonModule,
     SelectModule,
+    RippleModule,
+    StepperModule,
   ],
-  providers: [NzMessageService, DatePipe, MessageService, ConfirmationService],
+  providers: [
+    NzMessageService,
+    DatePipe,
+    MessageService,
+    ConfirmationService,
+    BsModalService,
+  ],
 })
 export class AdminModule {}
