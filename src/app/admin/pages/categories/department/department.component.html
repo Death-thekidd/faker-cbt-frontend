@@ -116,7 +116,7 @@
         <ng-template pTemplate="summary">
           <div class="flex items-center justify-between">
             In total there are
-            {{ department ? departments.length : 0 }} department(s).
+            {{ departments ? departments.length : 0 }} department(s).
           </div>
         </ng-template>
         <ng-template pTemplate="loading">
@@ -135,27 +135,25 @@
 <p-dialog
   [(visible)]="departmentDialog"
   [style]="{ width: '450px' }"
-  header="Level Details"
+  header="Department Details"
   [modal]="true"
   styleClass="p-fluid"
 >
   <ng-template pTemplate="content">
     <div class="tw-flex tw-flex-col tw-gap-6">
       <div>
-        <p-floatlabel>
-          <p-select
-            [options]="faculties"
-            optionValue="id"
-            optionLabel="name"
-            inputId="faculty"
-            [(ngModel)]="department.facultyId"
-            required
-            fluid
-            [showClear]="true"
-            [appendTo]="'body'"
-          ></p-select>
-          <label for="faculty">Select a Faculty</label>
-        </p-floatlabel>
+        <p-select
+          [options]="faculties"
+          optionValue="id"
+          optionLabel="name"
+          inputId="faculty"
+          [(ngModel)]="department.facultyId"
+          required
+          fluid
+          [showClear]="true"
+          [appendTo]="'body'"
+          placeholder="Select a Faculty"
+        ></p-select>
         <small
           class="tw-text-red-500"
           *ngIf="submitted && !department.facultyId"

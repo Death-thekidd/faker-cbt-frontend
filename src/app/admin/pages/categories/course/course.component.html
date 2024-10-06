@@ -148,58 +148,52 @@
   <ng-template pTemplate="content">
     <div class="tw-flex tw-flex-col tw-gap-6">
       <div>
-        <p-floatlabel>
-          <p-select
-            [options]="levels"
-            optionValue="id"
-            optionLabel="name"
-            inputId="level"
-            [(ngModel)]="course.levelId"
-            required
-            fluid
-            [showClear]="true"
-            [appendTo]="'body'"
-          ></p-select>
-          <label for="level">Select a Level</label>
-        </p-floatlabel>
+        <p-select
+          [options]="levels"
+          optionValue="id"
+          optionLabel="name"
+          inputId="level"
+          [(ngModel)]="course.levelId"
+          required
+          fluid
+          [showClear]="true"
+          [appendTo]="'body'"
+          placeholder="Select a Level"
+        ></p-select>
         <small class="tw-text-red-500" *ngIf="submitted && !course.levelId"
           >Level is required.</small
         >
       </div>
       <div>
-        <p-floatlabel>
-          <p-select
-            [options]="levels"
-            optionValue="id"
-            optionLabel="name"
-            inputId="department"
-            [(ngModel)]="course.departmentId"
-            required
-            fluid
-            [showClear]="true"
-            [appendTo]="'body'"
-          ></p-select>
-          <label for="department">Select a Department</label>
-        </p-floatlabel>
+        <p-select
+          [options]="levels"
+          optionValue="id"
+          optionLabel="name"
+          inputId="department"
+          [(ngModel)]="course.departmentId"
+          required
+          fluid
+          [showClear]="true"
+          [appendTo]="'body'"
+          placeholder="Select a Department"
+        ></p-select>
         <small class="tw-text-red-500" *ngIf="submitted && !course.departmentId"
           >Department is required.</small
         >
       </div>
       <div>
-        <p-floatlabel>
-          <p-select
-            [options]="semesters"
-            optionValue="id"
-            optionLabel="name"
-            inputId="semester"
-            [(ngModel)]="course.semesterId"
-            required
-            fluid
-            [showClear]="true"
-            [appendTo]="'body'"
-          ></p-select>
-          <label for="semester">Select a Semester</label>
-        </p-floatlabel>
+        <p-select
+          [options]="semesters"
+          optionValue="id"
+          optionLabel="name"
+          inputId="semester"
+          [(ngModel)]="course.semesterId"
+          required
+          fluid
+          [showClear]="true"
+          [appendTo]="'body'"
+          placeholder="Select a Semester"
+        ></p-select>
         <small class="tw-text-red-500" *ngIf="submitted && !course.semesterId"
           >Semester is required.</small
         >
