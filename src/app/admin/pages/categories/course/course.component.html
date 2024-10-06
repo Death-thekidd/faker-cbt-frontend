@@ -47,6 +47,7 @@
           'department',
           'semester'
         ]"
+        [(selection)]="selectedCourses"
       >
         <ng-template pTemplate="caption">
           <div
@@ -166,7 +167,7 @@
       </div>
       <div>
         <p-select
-          [options]="levels"
+          [options]="departments"
           optionValue="id"
           optionLabel="name"
           inputId="department"
