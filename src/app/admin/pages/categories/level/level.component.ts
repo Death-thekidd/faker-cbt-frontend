@@ -47,11 +47,8 @@ export class LevelComponent {
         this.levels = res?.data;
         this.listLevels = this.levels
           .slice(first, first + rows)
-          .map((q, index) => ({
-            ...q,
-            id: q?._id,
-            options: JSON.parse(q?.options),
-            answer: JSON.parse(q?.answer),
+          .map((l, index) => ({
+            ...l,
           }));
         this.totalRecords = this.levels.length;
         this.loading = false;

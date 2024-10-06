@@ -47,11 +47,8 @@ export class SessionComponent {
         this.sessions = res?.data;
         this.listSessions = this.sessions
           .slice(first, first + rows)
-          .map((q, index) => ({
-            ...q,
-            id: q?._id,
-            options: JSON.parse(q?.options),
-            answer: JSON.parse(q?.answer),
+          .map((s, index) => ({
+            ...s,
           }));
         this.totalRecords = this.sessions.length;
         this.loading = false;

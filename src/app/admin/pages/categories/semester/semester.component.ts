@@ -47,11 +47,8 @@ export class SemesterComponent {
         this.semesters = res?.data;
         this.listSemesters = this.semesters
           .slice(first, first + rows)
-          .map((q, index) => ({
-            ...q,
-            id: q?._id,
-            options: JSON.parse(q?.options),
-            answer: JSON.parse(q?.answer),
+          .map((s, index) => ({
+            ...s,
           }));
         this.totalRecords = this.semesters.length;
         this.loading = false;

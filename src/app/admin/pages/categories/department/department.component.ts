@@ -64,11 +64,8 @@ export class DepartmentComponent {
         this.departments = res?.data;
         this.listDepartments = this.departments
           .slice(first, first + rows)
-          .map((q, index) => ({
-            ...q,
-            id: q?._id,
-            options: JSON.parse(q?.options),
-            answer: JSON.parse(q?.answer),
+          .map((d, index) => ({
+            ...d,
           }));
         this.totalRecords = this.departments.length;
         this.loading = false;

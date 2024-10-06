@@ -47,11 +47,8 @@ export class FacultyComponent {
         this.faculties = res?.data;
         this.listFaculties = this.faculties
           .slice(first, first + rows)
-          .map((q, index) => ({
-            ...q,
-            id: q?._id,
-            options: JSON.parse(q?.options),
-            answer: JSON.parse(q?.answer),
+          .map((f, index) => ({
+            ...f,
           }));
         this.totalRecords = this.faculties.length;
         this.loading = false;

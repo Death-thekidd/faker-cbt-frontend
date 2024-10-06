@@ -96,11 +96,8 @@ export class CourseComponent implements OnInit {
         this.courses = res?.data;
         this.listCourses = this.courses
           .slice(first, first + rows)
-          .map((q, index) => ({
-            ...q,
-            id: q?._id,
-            options: JSON.parse(q?.options),
-            answer: JSON.parse(q?.answer),
+          .map((c, index) => ({
+            ...c,
           }));
         this.totalRecords = this.courses.length;
         this.loading = false;
