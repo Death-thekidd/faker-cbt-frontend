@@ -60,6 +60,7 @@ import { RippleModule } from 'primeng/ripple';
 import { StepperModule } from 'primeng/stepper';
 import { AddExamQuestionsComponent } from './page-section/add-exam-questions/add-exam-questions.component';
 import { LoadingComponent } from './page-section/loading/loading.component';
+import { FloatLabelModule } from 'primeng/floatlabel';
 
 @NgModule({
   declarations: [
@@ -125,6 +126,7 @@ import { LoadingComponent } from './page-section/loading/loading.component';
     SelectModule,
     RippleModule,
     StepperModule,
+    FloatLabelModule,
   ],
   providers: [
     NzMessageService,

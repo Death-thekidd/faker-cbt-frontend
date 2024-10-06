@@ -19,6 +19,7 @@ export class AddExamQuestionsComponent implements OnInit {
   questions?: any;
   selectedQuestions?: any = [];
   exam?: any;
+  loading = false;
 
   constructor(
     private questionService: QuestionService,
@@ -29,8 +30,13 @@ export class AddExamQuestionsComponent implements OnInit {
   ngOnInit(): void {
     this.questionService.getAll().subscribe(
       (response: any) => {
-        this.questions = response.data;
-        this.list = response.data;
+        this.questions = response.data.map((question: any) => {
+          return {
+            ...question,
+            options: JSON.parse(question.options),
+          };
+        });
+        this.list = this.questions;
         this.getExamDetails(this.examId!);
         this.isLoading = false;
       },
@@ -58,7 +64,7 @@ export class AddExamQuestionsComponent implements OnInit {
 
   reload(direction: string): void {
     this.getData();
-    this.message.success(`your clicked ${direction}!`);
+    this.message.success(`your clicked ${direction}!`, { nzDuration: 7000 });
   }
 
   select(ret: {}): void {
@@ -75,6 +81,7 @@ export class AddExamQuestionsComponent implements OnInit {
     this.filterValue = '';
   }
   addQuestions() {
+    this.loading = true;
     const submissionQuestions = new Array(this.selectedQuestions.length)
       .fill(0)
       .map((_, index) => ({
@@ -84,12 +91,13 @@ export class AddExamQuestionsComponent implements OnInit {
 
     this.examService.bulkCreateExamQuestions(submissionQuestions).subscribe(
       (response: any) => {
-        this.message.success(response.message);
+        this.message.success(response.message, { nzDuration: 7000 });
       },
       (error: any) => {
-        this.message.error(error);
+        this.message.error(error, { nzDuration: 7000 });
       }
     );
+    this.loading = false;
     console.info(submissionQuestions);
   }
 
@@ -99,7 +107,7 @@ export class AddExamQuestionsComponent implements OnInit {
         this.exam = response.data;
       },
       (error: any) => {
-        this.message.error(error);
+        this.message.error(error, { nzDuration: 7000 });
       }
     );
   }

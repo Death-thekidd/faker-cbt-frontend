@@ -15,6 +15,20 @@ export class FacultyService {
 
   constructor(private http: HttpClient) {}
 
+  create(question: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/create`, question);
+  }
+
+  edit(levelId: string, data: any): Observable<Response<any>> {
+    return this.http
+      .patch<Response<any>>(`${this.baseUrl}/${levelId}`, { ...data })
+      .pipe(retry(3));
+  }
+
+  delete(levelId: string): Observable<any[]> {
+    return this.http.delete<any[]>(`${this.baseUrl}/${levelId}`).pipe(retry(3));
+  }
+
   getAll(): Observable<Response<Faculty[]>> {
     return this.http
       .get<Response<Faculty[]>>(`${this.baseUrl}/`)

@@ -24,7 +24,6 @@ export class QuestionTypesComponent implements OnInit {
   loading: boolean = true;
   loadingSubmit: boolean = false;
   totalRecords: number = 0;
-  modalRef?: BsModalRef;
   submitted: boolean = false;
   questionTypeDialog: boolean = false;
 
@@ -77,10 +76,6 @@ export class QuestionTypesComponent implements OnInit {
     this.submitted = false;
     this.questionTypeDialog = true;
   }
-
-  exitModal = (): void => {
-    this.modalRef?.hide();
-  };
   hideDialog() {
     this.questionTypeDialog = false;
     this.submitted = false;

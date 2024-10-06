@@ -62,7 +62,7 @@ export class AddQuestionComponent {
 
   public onSubmit() {
     //const courseId=(<HTMLInputElement>document.getElementById(`course`)).value
-    this.message.info('Submitted');
+    this.message.info('Submitted', { nzDuration: 7000 });
     this.submitted = true;
     // stop here if form is invalid
 

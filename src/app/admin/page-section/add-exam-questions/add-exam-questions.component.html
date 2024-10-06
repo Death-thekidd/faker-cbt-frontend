@@ -7,7 +7,7 @@
       [(ngModel)]="selectedQuestions"
       [multiple]="true"
       optionLabel="questionText"
-      filterBy="questionText"
+      [filterFields]="['questionText', 'course']"
       [filter]="true"
       [listStyle]="{ 'max-height': '700px' }"
     >
@@ -39,10 +39,15 @@
           </li>
         </ol>
         <button
-          class="btn btn-success btn-block"
+          class="btn btn-success btn-block tw-w-[100%]"
           (click)="addQuestions()"
+          [disabled]="loading"
           *ngIf="selectedQuestions.length > 0"
         >
+          <span
+            *ngIf="loading"
+            class="spinner-border spinner-border-sm mr-1"
+          ></span>
           Add Question
         </button>
       </div>

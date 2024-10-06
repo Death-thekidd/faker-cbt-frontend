@@ -3,6 +3,170 @@
   <div class="layout-top-spacing">
     <div
       class="card tw-bg-white tw-border tw-border-gray-300 tw-p-8 tw-rounded-lg tw-mb-4"
-    ></div>
+    >
+      <p-toolbar class="mb-6 gap-2">
+        <ng-template pTemplate="left">
+          <p-button
+            pRipple
+            severity="success"
+            label="New"
+            icon="pi pi-plus"
+            class="tw-mr-2"
+            (click)="openNew()"
+            data-toggle="modal"
+            data-target="#newUserModal"
+          />
+          <p-button
+            pRipple
+            severity="danger"
+            label="Delete"
+            icon="pi pi-trash"
+            (click)="deleteSelectedLevels()"
+            [disabled]="!selectedLevels || !selectedLevels.length"
+          />
+        </ng-template>
+      </p-toolbar>
+      <p-table
+        #dt1
+        class="tw-w-[100%]"
+        [value]="levels"
+        [lazy]="true"
+        [paginator]="true"
+        [rows]="10"
+        [totalRecords]="totalRecords"
+        [loading]="loading"
+        (onLazyLoad)="loadData($event.first ?? 0, $event.rows ?? 10)"
+        [responsiveLayout]="'scroll'"
+        [rowHover]="true"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+        [globalFilterFields]="['name']"
+      >
+        <ng-template pTemplate="caption">
+          <div
+            class="tw-flex tw-flex-col md:tw-flex-row tw-justify-center tw-items-start tw-gap-y-2"
+          >
+            <p-button
+              label="Clear"
+              [outlined]="true"
+              icon="pi pi-filter-slash"
+              (click)="clear(dt1)"
+            />
+            <p-iconfield iconPosition="left" class="md:tw-ml-auto">
+              <p-inputicon styleClass="pi pi-search" />
+              <input
+                pInputText
+                type="text"
+                (input)="filterGlobal($event)"
+                placeholder="Search keyword"
+              />
+            </p-iconfield>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 4rem">
+              <p-tableHeaderCheckbox />
+            </th>
+            <th *ngFor="let col of cols" style="min-width: 10rem">
+              <div class="tw-flex tw-items-center">
+                {{ col.header }}
+                <p-columnFilter
+                  type="text"
+                  field="{{ col.field }}"
+                  display="menu"
+                />
+              </div>
+            </th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-level>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="level" />
+            </td>
+            <td *ngFor="let col of cols">{{ level[col.field] }}</td>
+            <td>
+              <p-button
+                pRipple
+                icon="pi pi-pencil"
+                class="tw-mr-2"
+                [rounded]="true"
+                [outlined]="true"
+                severity="success"
+                (click)="editLevel(level)"
+              />
+              <p-button
+                pRipple
+                icon="pi pi-trash"
+                severity="danger"
+                [rounded]="true"
+                [outlined]="true"
+                (click)="deleteLevel(level)"
+              />
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td [attr.colspan]="cols.length">No records found</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="flex items-center justify-between">
+            In total there are
+            {{ levels ? levels.length : 0 }} level(s).
+          </div>
+        </ng-template>
+        <ng-template pTemplate="loading">
+          <tr>
+            <td [attr.colspan]="cols.length">
+              <p-skeleton></p-skeleton>
+              <!-- Skeleton loader -->
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
   </div>
 </div>
+
+<p-dialog
+  [(visible)]="levelDialog"
+  [style]="{ width: '450px' }"
+  header="Level Details"
+  [modal]="true"
+  styleClass="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="tw-flex tw-flex-col tw-gap-6">
+      <div>
+        <label for="name" class="tw-block tw-font-bold tw-mb-3">Name</label>
+        <input
+          type="text"
+          pInputText
+          id="name"
+          [(ngModel)]="level.name"
+          required
+          autofocus
+          fluid
+        />
+        <small class="tw-text-red-500" *ngIf="submitted && !level.name"
+          >Name is required.</small
+        >
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      pRipple
+      label="Cancel"
+      icon="pi pi-times"
+      [text]="true"
+      (click)="hideDialog()"
+    />
+    <p-button pRipple label="Save" icon="pi pi-check" (click)="saveLevel()" />
+  </ng-template>
+</p-dialog>
