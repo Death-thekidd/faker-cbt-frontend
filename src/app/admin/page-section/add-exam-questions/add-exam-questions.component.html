@@ -7,18 +7,25 @@
       [(ngModel)]="selectedQuestions"
       [multiple]="true"
       optionLabel="questionText"
-      [filterFields]="['questionText', 'course']"
+      [filterFields]="[
+        'text',
+        'name',
+        'courseName',
+        'courseCode',
+        'score',
+        'type'
+      ]"
       [filter]="true"
       [listStyle]="{ 'max-height': '700px' }"
     >
       <ng-template pTemplate="header" style="border-top: 1px solid #218838">
-        Course Question Bank Question Bank
+        Question Bank
       </ng-template>
       <ng-template let-question pTemplate="item">
         <div class="country-item">
-          {{ question.questionText }}
+          {{ question.text }}
           <ol type="A">
-            <li *ngFor="let option of question.options">{{ option }}</li>
+            <li *ngFor="let option of question.options">{{ option.text }}</li>
           </ol>
         </div>
       </ng-template>
@@ -31,9 +38,11 @@
         <ol type="1">
           <li *ngFor="let question of selectedQuestions">
             <div class="country-item">
-              {{ question.questionText }}
+              {{ question.text }}
               <ol type="A">
-                <li *ngFor="let option of question.options">{{ option }}</li>
+                <li *ngFor="let option of question.options">
+                  {{ option.text }}
+                </li>
               </ol>
             </div>
           </li>

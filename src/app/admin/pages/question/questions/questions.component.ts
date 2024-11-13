@@ -30,12 +30,11 @@ export class QuestionsComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.cols = [
-      { field: 'course', header: 'Course' },
       { field: 'name', header: 'Name' },
-      { field: 'level', header: 'Level' },
-      { field: 'department', header: 'Department' },
-      { field: 'semester', header: 'Semester ' },
-      { field: 'questiontype', header: 'Question Type' },
+      { field: 'courseCode', header: 'Course Code' },
+      { field: 'courseName', header: 'Course Name' },
+      { field: 'score', header: 'Score' },
+      { field: 'type', header: 'Type' },
     ];
     this.loadData(0, 10);
   }
@@ -53,9 +52,6 @@ export class QuestionsComponent implements OnInit {
           .slice(first, first + rows)
           .map((q, index) => ({
             ...q,
-            id: q?._id,
-            options: JSON.parse(q?.options),
-            answer: JSON.parse(q?.answer),
           }));
         this.totalRecords = this.questions.length;
         this.loading = false;

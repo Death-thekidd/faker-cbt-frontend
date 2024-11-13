@@ -44,10 +44,10 @@
         [expandedRowKeys]="expandedRows"
         [globalFilterFields]="[
           'name',
-          'department',
-          'level',
-          'semester',
-          'questiontype'
+          'courseCode',
+          'courseName',
+          'score',
+          'type'
         ]"
         [tableStyle]="{ 'min-width': '75rem' }"
         [(selection)]="selectedQuestions"
@@ -162,18 +162,12 @@
                       <li
                         *ngFor="let option of question.options; let i = index"
                       >
-                        {{ option }}
+                        {{ option.text }}
                         <strong>
-                          <i
-                            class="text-success"
-                            *ngIf="question.answer[i] == 1"
-                          >
+                          <i class="text-success" *ngIf="option.isCorrect">
                             True
                           </i>
-                          <i
-                            class="text-danger"
-                            *ngIf="question.answer[i] == 2"
-                          >
+                          <i class="text-danger" *ngIf="!option.isCorrect">
                             False
                           </i>
                         </strong>

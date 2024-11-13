@@ -24,7 +24,7 @@ export class EditExamComponent implements OnInit {
   isLoading = true;
   val: any;
   sessions?: any;
-  examtypes?: any;
+  examtypes?: any[] = ['MCQ', 'Medical'];
   courses?: any;
   inputForm!: UntypedFormGroup;
   loading = false;
@@ -38,7 +38,7 @@ export class EditExamComponent implements OnInit {
   constructor(
     private formBuilder: UntypedFormBuilder,
     private examService: ExamService,
-    private examtypeService: ExamtypeService,
+    // private examtypeService: ExamtypeService,
     private sessionService: SessionService,
     private message: NzMessageService,
     private courseService: CourseService,
@@ -65,14 +65,14 @@ export class EditExamComponent implements OnInit {
           'yyyy-MM-dd'
         );
         this.inputForm = this.formBuilder.group({
-          ename: [this.exam.name, Validators.required],
+          name: [this.exam.name, Validators.required],
           startDate: [startDate, Validators.required],
           endDate: [endDate, Validators.required],
           hours: [hours, [Validators.required, Validators.maxLength(2)]],
           minutes: [minutes, [Validators.required, Validators.maxLength(2)]],
-          session: [this.exam.sessions.id, Validators.required],
-          course: [this.exam.courses.id, Validators.required],
-          examtype: [this.exam.examtypeId, Validators.required],
+          session: [this.exam.session.id, Validators.required],
+          course: [this.exam.course.id, Validators.required],
+          type: [this.exam.type, Validators.required],
         });
         this.isLoading = false;
       },
@@ -96,12 +96,12 @@ export class EditExamComponent implements OnInit {
     this.loading = true;
     this.examService
       .edit(this.examId!, {
-        name: this.f.ename.value,
+        name: this.f.name.value,
         startDate: this.f.startDate.value,
         endDate: this.f.endDate.value,
         duration: duration,
         sessionId: this.f.session.value,
-        examtypeId: this.f.examtype.value,
+        type: this.f.type.value,
         courseId: this.f.course.value,
       })
       .pipe(first())
@@ -149,7 +149,7 @@ export class EditExamComponent implements OnInit {
       minutes: ['', Validators.required],
       session: ['', Validators.required],
       course: ['', Validators.required],
-      examtype: ['', Validators.required],
+      type: ['', Validators.required],
     });
 
     this.sessionService.getAll().subscribe(
@@ -164,17 +164,17 @@ export class EditExamComponent implements OnInit {
       }
     );
 
-    this.examtypeService.getAll().subscribe(
-      (response: Response<any[]>) => {
-        this.examtypes = response.data;
-        console.log('examtypes', response.data);
-      },
-      (error) => {
-        this.message.create('error', `${error}`, {
-          nzDuration: 7000,
-        });
-      }
-    );
+    // this.examtypeService.getAll().subscribe(
+    //   (response: Response<any[]>) => {
+    //     this.examtypes = response.data;
+    //     console.log('examtypes', response.data);
+    //   },
+    //   (error) => {
+    //     this.message.create('error', `${error}`, {
+    //       nzDuration: 7000,
+    //     });
+    //   }
+    // );
 
     this.courseService.getAll().subscribe(
       (response: Response<any[]>) => {

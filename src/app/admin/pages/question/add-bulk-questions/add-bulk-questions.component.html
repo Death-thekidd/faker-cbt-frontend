@@ -42,13 +42,11 @@
                   id="questionType"
                   formControlName="questiontype"
                   required=""
+                  (change)="onTextChange()"
                 >
                   <option value="">Choose Question Type</option>
-                  <option
-                    *ngFor="let data of questiontypes"
-                    value="{{ data.id }}"
-                  >
-                    {{ data.name }}
+                  <option *ngFor="let data of questiontypes" value="{{ data }}">
+                    {{ data }}
                   </option>
                 </select>
                 <div

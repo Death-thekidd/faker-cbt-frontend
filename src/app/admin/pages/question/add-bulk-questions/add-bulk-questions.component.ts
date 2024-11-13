@@ -6,6 +6,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { Response } from '../../../../classes/types/response';
 import { FacultyService } from '../../../../services/faculty.service';
 import {
+  FormBuilder,
+  FormGroup,
   UntypedFormBuilder,
   UntypedFormGroup,
   Validators,
@@ -30,36 +32,44 @@ export class AddBulkQuestionsComponent implements OnInit {
   departments?: Department[];
   sessions?: Session[];
   courses?: Course[];
-  questiontypes?: any[];
+  questiontypes?: any[] = ['MCQ', 'Medical'];
   questions?: any[];
   val: any;
   examtypes?: any;
-  inputForm!: UntypedFormGroup;
+  // inputForm!: UntypedFormGroup;
   loading = false;
   submitted = false;
   returnUrl!: string;
   error = '';
   questionType?: string;
-  questionBody?: string;
+  questionBody: string = '';
   mytext?: string;
-  formattedQuestion?: any;
+  formattedQuestion: any[] = [];
+  inputForm: FormGroup;
 
   constructor(
     private departmentService: DepartmentService,
     private facultyService: FacultyService,
     private sessionService: SessionService,
     private courseService: CourseService,
-    private questionTypesService: QuestiontypeService,
+    // private questionTypesService: QuestiontypeService,
     private questionService: QuestionService,
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: UntypedFormBuilder,
-    private message: NzMessageService
-  ) {}
+    private message: NzMessageService,
+    private fb: FormBuilder
+  ) {
+    this.inputForm = this.fb.group({
+      allQuestions: ['', Validators.required],
+      questiontype: ['', Validators.required],
+      course: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     console.log(moment().valueOf());
-    this.initializeForm();
+    // this.initializeForm();
     this.getFormData();
   }
 
@@ -122,36 +132,37 @@ export class AddBulkQuestionsComponent implements OnInit {
     //this.inputForm.setValue(allQuestions:) = text
   }
 
-  setAnswer(value: any) {
-    if (value == 1) return '<i class="text-success">True</i>';
-    else if (value == 2) return '<i class="text-red">False</i>';
-    else return;
+  setAnswer(isCorrect: boolean): string {
+    return isCorrect
+      ? '<i class="text-success">True</i>'
+      : '<i class="text-danger">False</i>';
   }
 
+  // Triggered whenever the text in the input field changes
   onTextChange() {
-    const questionBody = this.f.allQuestions.value;
-    const questionArray = questionBody!.split('[*NEXT*]');
-    let tempQBody: any = "<ol type='1'>";
+    // Get the input text and question type from the form control
+    const questionBody = this.inputForm.get('allQuestions')?.value || '';
+    const questionType = this.inputForm.get('questiontype')?.value || '';
 
-    //console.log(questionArray);
-    this.formattedQuestion = this.questionFormatter(questionArray);
-    //console.log(this.formattedQuestion);
-    for (let i = 0; i < this.formattedQuestion[0].length; i++) {
-      tempQBody =
-        tempQBody + `<li>${this.formattedQuestion[0][i]}<ol type="a">`;
+    // Format the questions using the updated questionFormatter
+    this.formattedQuestion = this.questionFormatter(questionBody, questionType);
 
-      for (let x = 0; x < this.formattedQuestion[1][i].length; x++) {
-        tempQBody =
-          tempQBody +
-          `<li>${this.formattedQuestion[1][i][x]} ${this.setAnswer(
-            this.formattedQuestion[2][i][x]
-          )}</li>`;
-        //console.log(this.formattedQuestion[1][i][x])
+    // Generate HTML preview for the formatted questions
+    let tempQBody = "<ol type='1'>";
+    for (let question of this.formattedQuestion) {
+      tempQBody += `<li>${question.text}<ol type="a">`;
+
+      for (let option of question.options) {
+        tempQBody += `<li>${option.text} ${this.setAnswer(
+          option.isCorrect
+        )}</li>`;
       }
-      tempQBody = tempQBody + `</ol></li>`;
-      //tempOBody = `<li>${this.formattedQuestion[1][i]}`
+
+      tempQBody += `</ol></li>`;
     }
-    tempQBody = tempQBody + `</ol>`;
+    tempQBody += `</ol>`;
+
+    // Set the generated HTML preview
     this.questionBody = tempQBody;
   }
 
@@ -197,17 +208,17 @@ export class AddBulkQuestionsComponent implements OnInit {
       }
     );
 
-    this.questionTypesService.getAll().subscribe(
-      (response: Response<any[]>) => {
-        this.questiontypes = response.data;
-        //console.log(response.data)
-      },
-      (error) => {
-        this.message.create('error', `${error}`, {
-          nzDuration: 7000,
-        });
-      }
-    );
+    // this.questionTypesService.getAll().subscribe(
+    //   (response: Response<any[]>) => {
+    //     this.questiontypes = response.data;
+    //     //console.log(response.data)
+    //   },
+    //   (error) => {
+    //     this.message.create('error', `${error}`, {
+    //       nzDuration: 7000,
+    //     });
+    //   }
+    // );
 
     this.questionService.getAll().subscribe(
       (response: Response<any[]>) => {
@@ -227,75 +238,55 @@ export class AddBulkQuestionsComponent implements OnInit {
     return this.inputForm!.controls;
   }
 
-  questionFormatter(questions: any) {
-    let oneQuestionAnswersArray: any = [];
-    let oneQuestionArray: any = [];
-    let oneQuestionOptionsArray: any = [];
+  // Format each question into a structured object
+  questionFormatter(questions: string, questionType: string): any[] {
+    const formattedQuestions: any[] = [];
+    const questionPattern = /\[\*START\*\](.*?)(?=\[\*START\*\]|$)/gs;
+    const optionPattern = /\[\*(\w)\*\]\s*(.*?)\s*\[(T|F)\]/g;
 
-    for (let i = 0; i < questions.length; i++) {
-      let tempAnswerArray: any = [];
-      let text = questions[i];
-      let questionText = text
-        .slice(text.indexOf('[*START*]'), text.indexOf('[*a*]'))
-        .replace('[*START*]', ' ')
-        .trim();
-      let option1 = text
-        .slice(text.indexOf('[*a*]'), text.indexOf('[*b*]'))
-        .replace('[*a*]', ' ')
-        .trim();
-      let option2 = text
-        .slice(text.indexOf('[*b*]'), text.indexOf('[*c*]'))
-        .replace('[*b*]', ' ')
-        .trim();
-      let option3 = text
-        .slice(text.indexOf('[*c*]'), text.indexOf('[*d*]'))
-        .replace('[*c*]', ' ')
-        .trim();
-      let option4 = text
-        .slice(text.indexOf('[*d*]'), text.indexOf('[*e*]'))
-        .replace('[*d*]', ' ')
-        .trim();
-      let option5 = text
-        .slice(text.indexOf('[*e*]'), text.indexOf('[*END*]'))
-        .replace('[*e*]', ' ')
-        .trim();
+    let questionMatch;
 
-      if (option1.includes('[T]')) tempAnswerArray.push(1);
-      else if (option1.includes('[F]')) tempAnswerArray.push(2);
+    // Match each question block starting with [*START*]
+    while ((questionMatch = questionPattern.exec(questions)) !== null) {
+      const questionBlock = questionMatch[1].trim();
 
-      if (option2.includes('[T]')) tempAnswerArray.push(1);
-      else if (option2.includes('[F]')) tempAnswerArray.push(2);
+      // Separate question text from options
+      const questionText = questionBlock.split('\n')[0].trim();
+      const options: { text: string; isCorrect: boolean }[] = [];
+      let optionMatch;
+      let trueOptionCount = 0;
 
-      if (option3.includes('[T]')) tempAnswerArray.push(1);
-      else if (option3.includes('[F]')) tempAnswerArray.push(2);
+      // Extract each option and its correctness
+      while ((optionMatch = optionPattern.exec(questionBlock)) !== null) {
+        const optionText = optionMatch[2].trim();
+        const isCorrect = optionMatch[3].toUpperCase() === 'T';
 
-      if (option4.includes('[T]')) tempAnswerArray.push(1);
-      else if (option4.includes('[F]')) tempAnswerArray.push(2);
+        options.push({ text: optionText, isCorrect });
 
-      if (option5.includes('[T]')) tempAnswerArray.push(1);
-      else if (option5.includes('[F]')) tempAnswerArray.push(2);
+        // Count true options for MCQ questions
+        if (isCorrect) trueOptionCount++;
+      }
 
-      option1 = option1.replace('[T]', ' ').replace('[F]', ' ').trim();
-      option2 = option2.replace('[T]', ' ').replace('[F]', ' ').trim();
-      option3 = option3.replace('[T]', ' ').replace('[F]', ' ').trim();
-      option4 = option4.replace('[T]', ' ').replace('[F]', ' ').trim();
-      option5 = option5.replace('[T]', ' ').replace('[F]', ' ').trim();
+      // Validate options count (minimum of 2 and maximum of 5)
+      if (options.length < 2 || options.length > 5) {
+        this.message.warning(
+          `Question must have between 2 and 5 options. Found ${options.length}.`
+        );
+        continue; // Skip this question if it doesn't meet the criteria
+      }
 
-      oneQuestionArray.push(questionText);
-      oneQuestionOptionsArray.push([
-        option1,
-        option2,
-        option3,
-        option4,
-        option5,
-      ]);
-      oneQuestionAnswersArray.push(tempAnswerArray);
+      // Additional check for MCQ-type questions
+      if (questionType === 'MCQ' && trueOptionCount !== 1) {
+        this.message.warning(
+          `MCQ-type questions must have exactly one true option. Found ${trueOptionCount}.`
+        );
+        continue; // Skip this question if it doesn't meet MCQ criteria
+      }
+
+      formattedQuestions.push({ text: questionText, options });
     }
-    //console.log(oneQuestionArray)
-    //console.log(oneQuestionOptionsArray)
-    //console.log(oneQuestionAnswersArray)
 
-    return [oneQuestionArray, oneQuestionOptionsArray, oneQuestionAnswersArray];
+    return formattedQuestions;
   }
 
   downloadObjectAsJson(exportObj: any, exportName: any) {

@@ -31,11 +31,11 @@ export class ExamsComponent implements OnInit {
   ngOnInit(): void {
     this.cols = [
       { field: 'name', header: 'Name' },
-      { field: 'course', header: 'Course' },
+      { field: 'courseCode', header: 'Course Code' },
       { field: 'level', header: 'Level' },
       { field: 'department', header: 'Department' },
       { field: 'semester', header: 'Semester ' },
-      { field: 'session', header: 'Session ' },
+      { field: 'sessionName', header: 'Session ' },
       { field: 'faculty', header: 'Faculty ' },
       { field: 'startDate', header: 'Start Date ' },
       { field: 'duration', header: 'Duration ' },

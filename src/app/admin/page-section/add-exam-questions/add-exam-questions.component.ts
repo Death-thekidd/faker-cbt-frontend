@@ -33,7 +33,6 @@ export class AddExamQuestionsComponent implements OnInit {
         this.questions = response.data.map((question: any) => {
           return {
             ...question,
-            options: JSON.parse(question.options),
           };
         });
         this.list = this.questions;

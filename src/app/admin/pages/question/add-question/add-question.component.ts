@@ -1,212 +1,120 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Department } from '../../../../models/department';
-import { DepartmentService } from '../../../../services/department.service';
-import { NzMessageService } from 'ng-zorro-antd/message';
-import { Response } from '../../../../classes/types/response';
-import { FacultyService } from '../../../../services/faculty.service';
-import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
-import { SessionService } from '../../../../services/session.service';
 import { CourseService } from '../../../../services/course.service';
-import { Faculty } from '../../../../models/faculty';
-import { Course } from '../../../../models/course';
-import { Session } from '../../../../models/session';
-import { QuestiontypeService } from '../../../../services/questiontype.service';
 import { QuestionService } from '../../../../services/question.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
+
+interface Option {
+  text: string;
+  isCorrect: boolean;
+}
 
 @Component({
   selector: 'app-add-question',
   templateUrl: './add-question.component.html',
-  styleUrl: './add-question.component.scss',
+  styleUrls: ['./add-question.component.scss'],
 })
-export class AddQuestionComponent {
-  tableData?: Department[];
-  faculties?: Faculty[];
-  departments?: Department[];
-  sessions?: Session[];
-  courses?: Course[];
-  questiontypes?: any[];
-  questions?: any[];
-  val: any;
-  examtypes?: any;
-  inputForm!: UntypedFormGroup;
+export class AddQuestionComponent implements OnInit {
+  course: string = '';
+  questionType: string = '';
+  questionText: string = '';
+  score: number = 1;
+  courses: any[] = [];
+  questiontypes: any[] = ['MCQ', 'Medical'];
+  options: Option[] = [
+    { text: '', isCorrect: true },
+    { text: '', isCorrect: false },
+  ];
   loading = false;
   submitted = false;
-  returnUrl!: string;
-  error = '';
-  questionType?: string;
 
   constructor(
-    private departmentService: DepartmentService,
-    private facultyService: FacultyService,
-    private sessionService: SessionService,
     private courseService: CourseService,
-    private questionTypesService: QuestiontypeService,
     private questionService: QuestionService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private formBuilder: UntypedFormBuilder,
     private message: NzMessageService
   ) {}
 
   ngOnInit(): void {
-    this.initializeForm();
-    this.getFormData();
-
-    //this.getPageParam();
+    this.getCourses();
   }
 
-  public onSubmit() {
-    //const courseId=(<HTMLInputElement>document.getElementById(`course`)).value
-    this.message.info('Submitted', { nzDuration: 7000 });
-    this.submitted = true;
-    // stop here if form is invalid
+  addOption(): void {
+    if (this.options.length < 5) {
+      this.options.push({ text: '', isCorrect: false });
+    }
+  }
 
-    if (this.inputForm!.invalid) {
-      this.inputForm.errors;
+  removeOption(): void {
+    if (this.options.length > 2) {
+      this.options.pop();
+    }
+  }
+
+  setCorrectAnswer(index: number): void {
+    console.log('nawa');
+    if (this.questionType === 'MCQ') {
+      this.options.forEach((option, i) => (option.isCorrect = i === index));
+    } else if (this.questionType === 'Medical') {
+      this.options[index].isCorrect = !this.options[index].isCorrect;
+    }
+  }
+
+  onSubmit() {
+    this.submitted = true;
+
+    if (
+      !this.course ||
+      !this.questionType ||
+      !this.questionText ||
+      !this.score
+    ) {
       return;
     }
-    this.loading = true;
-    const option: any = [
-      this.f.option1.value,
-      this.f.option2.value,
-      this.f.option3.value,
-      this.f.option4.value,
-      this.f.option5.value,
-    ];
-
-    const answer: any = [
-      this.f.answer1.value,
-      this.f.answer2.value,
-      this.f.answer3.value,
-      this.f.answer4.value,
-      this.f.answer5.value,
-    ];
 
     const questionData = {
-      questionText: this.f.questionText.value,
-      questiontypeId: this.f.questiontype.value,
-      options: option,
-      courseId: this.f.course.value,
-      answer: answer,
+      courseId: this.course,
+      text: this.questionText,
+      type: this.questionType,
+      score: this.score,
+      options: this.options,
     };
 
     console.log(questionData);
-    this.questionService.create(questionData).subscribe(
-      (response: any) => {
-        this.message.info(response.message);
-        this.initializeForm();
-        this.loading = false;
-      },
-      (error: any) => {
-        this.message.error(error);
-      }
-    );
-    this.loading = false;
+
+    // Uncomment below to integrate the question creation with the service
+    // this.loading = true;
+    // this.questionService.create(questionData).subscribe(
+    //   (response: any) => {
+    //     this.message.info(response.message);
+    //     this.resetForm();
+    //     this.loading = false;
+    //   },
+    //   (error: any) => {
+    //     this.message.error(error);
+    //     this.loading = false;
+    //   }
+    // );
   }
 
-  initializeForm() {
-    this.inputForm = this.formBuilder.group({
-      questionText: ['', [Validators.required]],
-      questiontype: ['', Validators.required],
-      course: ['', Validators.required],
-      option1: ['', Validators.required],
-      option2: ['', [Validators.required]],
-      option3: ['', [Validators.required]],
-      option4: ['', Validators.required],
-      option5: ['', Validators.required],
-      answer1: ['', Validators.required],
-      answer2: ['', [Validators.required]],
-      answer3: ['', [Validators.required]],
-      answer4: ['', Validators.required],
-      answer5: ['', Validators.required],
-    });
-  }
-
-  /**
-   * Get the Route Parameter (question number) of Page
-   */
-  public getPageParam() {
-    this.route.queryParams.subscribe(
-      (params: any) => {
-        this.questionType = params['question-type'];
-        this.message.info(this.questionType!);
-      },
-      (error: any) => {
-        this.message.error(error);
-        this.questionType = '';
-      }
-    );
-  }
-
-  getFormData() {
-    this.departmentService.getAll().subscribe(
-      (response: Response<Department[]>) => {
-        this.departments = response.data;
-        //console.log(response.data)
-      },
-      (error) => {
-        this.message.create('error', `${error}`, {
-          nzDuration: 7000,
-        });
-      }
-    );
-
-    this.facultyService.getAll().subscribe(
-      (response: Response<Faculty[]>) => {
-        this.faculties = response.data;
-        //console.log(response.data)
-      },
-      (error) => {
-        this.message.create('error', `${error}`, {
-          nzDuration: 7000,
-        });
-      }
-    );
-
+  getCourses() {
     this.courseService.getAll().subscribe(
-      (response: Response<Course[]>) => {
+      (response: any) => {
         this.courses = response.data;
-        //console.log(response.data)
       },
       (error) => {
-        this.message.create('error', `${error}`, {
-          nzDuration: 7000,
-        });
-      }
-    );
-
-    this.questionTypesService.getAll().subscribe(
-      (response: Response<any[]>) => {
-        this.questiontypes = response.data;
-        //console.log(response.data)
-      },
-      (error) => {
-        this.message.create('error', `${error}`, {
-          nzDuration: 7000,
-        });
-      }
-    );
-
-    this.questionService.getAll().subscribe(
-      (response: Response<any[]>) => {
-        this.questions = response.data;
-        //console.log(response.data)
-      },
-      (error) => {
-        this.message.create('error', `${error}`, {
-          nzDuration: 7000,
-        });
+        this.message.error('Failed to load courses: ' + error);
       }
     );
   }
 
-  // convenience getter for easy access to form fields
-  get f(): any {
-    return this.inputForm!.controls;
+  resetForm() {
+    this.course = '';
+    this.questionType = '';
+    this.questionText = '';
+    this.score = 1;
+    this.options = [
+      { text: '', isCorrect: true },
+      { text: '', isCorrect: false },
+    ];
+    this.submitted = false;
   }
 }

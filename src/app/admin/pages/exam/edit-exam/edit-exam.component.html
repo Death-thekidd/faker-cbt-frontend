@@ -23,45 +23,42 @@
               >
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <label for="ename">Exam name</label>
+                    <label for="name">Exam name</label>
                     <input
                       type="text"
                       class="form-control"
-                      id="ename"
-                      formControlName="ename"
+                      id="name"
+                      formControlName="name"
                       placeholder="e.g ANCILLARY MATHEMATICS I"
                       value=""
                       required=""
                     />
-                    <div *ngIf="submitted && f.ename.errors" class="text-red">
-                      <small *ngIf="f.ename.errors.required">
+                    <div *ngIf="submitted && f.name.errors" class="text-red">
+                      <small *ngIf="f.name.errors.required">
                         Valid Exam name is required.</small
                       >
                     </div>
                   </div>
 
                   <div class="col-md-6 mb-3">
-                    <label for="course">ExamType</label>
+                    <label for="type">Type</label>
                     <select
                       class="custom-select d-block w-100"
-                      id="examtype"
-                      formControlName="examtype"
+                      id="type"
+                      formControlName="type"
                       required=""
                     >
-                      <option value="">Choose ExamType...</option>
+                      <option value="">Choose Type...</option>
                       <option
                         *ngFor="let examtype of examtypes"
-                        value="{{ examtype.id }}"
+                        value="{{ examtype }}"
                       >
-                        {{ examtype.name }}
+                        {{ examtype }}
                       </option>
                     </select>
-                    <div
-                      *ngIf="submitted && f.examtype.errors"
-                      class="text-red"
-                    >
-                      <small *ngIf="f.examtype.errors.required">
-                        Please select a valid ExamType.</small
+                    <div *ngIf="submitted && f.type.errors" class="text-red">
+                      <small *ngIf="f.type.errors.required">
+                        Please select a valid Type.</small
                       >
                     </div>
                   </div>
