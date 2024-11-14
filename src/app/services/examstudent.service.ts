@@ -8,35 +8,37 @@ import { Response } from '../classes/types/response';
 @Injectable({
   providedIn: 'root',
 })
-export class ExamquestionService {
-  baseUrl = `${environment.apiUrl}/examquestions`;
+export class ExamstudentService {
+  baseUrl = `${environment.apiUrl}/examstudents`;
 
   constructor(private http: HttpClient) {}
 
   create(data: any, examId: string | undefined): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/${examId}/questions`, {
-      questionIds: data,
+    return this.http.post<any>(`${this.baseUrl}/${examId}/students`, {
+      students: data,
     });
   }
 
-  getAllNotAdded(examId: string | undefined): Observable<Response<any[]>> {
+  getAllStudentExams(
+    studentId: string | undefined
+  ): Observable<Response<any[]>> {
     return this.http
-      .get<Response<any[]>>(`${this.baseUrl}/${examId}/questions`)
+      .get<Response<any[]>>(`${this.baseUrl}/${studentId}/exams`)
       .pipe(retry(3));
   }
 
   getAllAdded(examId: string | undefined): Observable<Response<any[]>> {
     return this.http
-      .get<Response<any[]>>(`${this.baseUrl}/${examId}/added-questions`)
+      .get<Response<any[]>>(`${this.baseUrl}/${examId}/students`)
       .pipe(retry(3));
   }
 
   delete(
     examId: string | undefined,
-    questionId: string | undefined
+    studentId: string | undefined
   ): Observable<any[]> {
     return this.http
-      .delete<any[]>(`${this.baseUrl}/${examId}/questions/${questionId}`)
+      .delete<any[]>(`${this.baseUrl}/${examId}/students/${studentId}`)
       .pipe(retry(3));
   }
 }

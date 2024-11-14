@@ -61,6 +61,7 @@ import { StepperModule } from 'primeng/stepper';
 import { AddExamQuestionsComponent } from './page-section/add-exam-questions/add-exam-questions.component';
 import { LoadingComponent } from './page-section/loading/loading.component';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { AddExamStudentsComponent } from './page-section/add-exam-students/add-exam-students.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     EditExamComponent,
     AddExamQuestionsComponent,
     LoadingComponent,
+    AddExamStudentsComponent,
   ],
   imports: [
     CommonModule,

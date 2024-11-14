@@ -1,8 +1,8 @@
 <app-loading [isLoading]="isLoading"></app-loading>
 <div class="row" *ngIf="!isLoading">
-  <div class="col-md-6">
+  <div class="col-md-6 tw-mt-5">
     <p-listbox
-      [options]="questions"
+      [options]="questionsNotAdded"
       class="card card-success"
       [(ngModel)]="selectedQuestions"
       [multiple]="true"
@@ -30,35 +30,41 @@
         </div>
       </ng-template>
     </p-listbox>
+    <button
+      class="btn btn-success btn-block tw-w-[100%] tw-mt-5"
+      (click)="addQuestions()"
+      [disabled]="loading"
+      *ngIf="selectedQuestions.length > 0"
+    >
+      <span
+        *ngIf="loading"
+        class="spinner-border spinner-border-sm mr-1"
+      ></span>
+      Add Question(s)
+    </button>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-6 tw-mt-5">
     <div class="mr-1 card-outline card card-success">
-      <div class="card-header">Selected Questions</div>
+      <div class="card-header">Added Questions</div>
       <div class="card-body">
         <ol type="1">
-          <li *ngFor="let question of selectedQuestions">
-            <div class="country-item">
-              {{ question.text }}
+          <li *ngFor="let question of questionsAdded">
+            <div class="country-item tw-relative">
+              {{ question?.text }}
               <ol type="A">
-                <li *ngFor="let option of question.options">
-                  {{ option.text }}
+                <li *ngFor="let option of question?.options">
+                  {{ option?.text }}
                 </li>
               </ol>
+              <button
+                class="btn btn-danger btn-block md:tw-w-[40%] tw-w-[50%] tw-mt-2 md:tw-mt-0 tw-absolute tw-right-0 tw-bottom-0"
+                (click)="deleteQuestion(question?.id)"
+              >
+                Remove
+              </button>
             </div>
           </li>
         </ol>
-        <button
-          class="btn btn-success btn-block tw-w-[100%]"
-          (click)="addQuestions()"
-          [disabled]="loading"
-          *ngIf="selectedQuestions.length > 0"
-        >
-          <span
-            *ngIf="loading"
-            class="spinner-border spinner-border-sm mr-1"
-          ></span>
-          Add Question
-        </button>
       </div>
     </div>
   </div>

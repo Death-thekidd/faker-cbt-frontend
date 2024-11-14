@@ -1,112 +1,124 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { QuestionService } from '../../../services/question.service';
+import { ExamquestionService } from '../../../services/examquestion.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ListboxFilterOptions } from 'primeng/listbox';
 import { TransferItem } from 'ng-zorro-antd/transfer';
-import { StepsModule } from 'primeng/steps';
-import { MenuItem } from 'primeng/api';
 import { ExamService } from '../../../services/exam.service';
 
 @Component({
   selector: 'app-add-exam-questions',
   templateUrl: './add-exam-questions.component.html',
-  styleUrl: './add-exam-questions.component.scss',
+  styleUrls: ['./add-exam-questions.component.scss'],
 })
 export class AddExamQuestionsComponent implements OnInit {
   @Input() examId?: string;
   isLoading: boolean = true;
   filterValue = '';
-  questions?: any;
-  selectedQuestions?: any = [];
-  exam?: any;
+  questionsNotAdded: any[] = [];
+  questionsAdded: any[] = [];
+  selectedQuestions: any[] = [];
+  exam: any;
   loading = false;
 
   constructor(
-    private questionService: QuestionService,
+    private examquestionService: ExamquestionService,
     private message: NzMessageService,
     private examService: ExamService
   ) {}
 
   ngOnInit(): void {
-    this.questionService.getAll().subscribe(
+    if (this.examId) {
+      this.fetchQuestions();
+      this.getExamDetails(this.examId);
+    }
+  }
+
+  // Fetch both not added and added questions for the exam
+  fetchQuestions() {
+    this.isLoading = true;
+
+    // Fetch questions not yet added to the exam
+    this.examquestionService.getAllNotAdded(this.examId).subscribe(
       (response: any) => {
-        this.questions = response.data.map((question: any) => {
-          return {
-            ...question,
-          };
-        });
-        this.list = this.questions;
-        this.getExamDetails(this.examId!);
+        this.questionsNotAdded = response.data;
         this.isLoading = false;
       },
       (error: any) => {
-        console.log(error);
+        this.message.error('Failed to load questions not added.', {
+          nzDuration: 5000,
+        });
+        this.isLoading = false;
       }
     );
-  }
 
-  list: TransferItem[] = [];
-  getData(): void {
-    let ret: TransferItem[] = [];
-    this.questionService.getAll().subscribe(
+    // Fetch questions already added to the exam
+    this.examquestionService.getAllAdded(this.examId).subscribe(
       (response: any) => {
-        this.list = response.data;
-        this.questions = response.data;
-        ret = response.data;
+        this.questionsAdded = response.data;
+        this.isLoading = false;
       },
       (error: any) => {
-        console.log(error);
+        this.message.error('Failed to load added questions.', {
+          nzDuration: 5000,
+        });
+        this.isLoading = false;
       }
     );
-    //this.list = ret;
   }
 
-  reload(direction: string): void {
-    this.getData();
-    this.message.success(`your clicked ${direction}!`, { nzDuration: 7000 });
-  }
-
-  select(ret: {}): void {
-    console.log('nzSelectChange', ret);
-  }
-
-  change(ret: {}): void {
-    const getList: any = ret;
-    console.log('nzChange', getList.list);
-  }
-
-  myResetFunction(options: any) {
-    options.reset();
-    this.filterValue = '';
-  }
+  // Add selected questions to the exam
   addQuestions() {
     this.loading = true;
-    const submissionQuestions = new Array(this.selectedQuestions.length)
-      .fill(0)
-      .map((_, index) => ({
-        examId: this.examId,
-        questionId: this.selectedQuestions[index].id,
-      }));
 
-    this.examService.bulkCreateExamQuestions(submissionQuestions).subscribe(
-      (response: any) => {
-        this.message.success(response.message, { nzDuration: 7000 });
-      },
-      (error: any) => {
-        this.message.error(error, { nzDuration: 7000 });
-      }
+    const submissionQuestions = this.selectedQuestions.map(
+      (question: any) => question.id
     );
-    this.loading = false;
-    console.info(submissionQuestions);
+
+    this.examquestionService
+      .create(submissionQuestions, this.examId)
+      .subscribe(
+        (response: any) => {
+          this.message.success(response.message, { nzDuration: 5000 });
+          this.fetchQuestions(); // Reload the lists after adding questions
+        },
+        (error: any) => {
+          this.message.error('Failed to add questions.', { nzDuration: 5000 });
+        }
+      )
+      .add(() => (this.loading = false));
   }
 
+  // Delete a question from the exam
+  deleteQuestion(questionId: string) {
+    this.loading = true;
+
+    this.examquestionService
+      .delete(this.examId, questionId)
+      .subscribe(
+        () => {
+          this.message.success('Question removed from the exam.', {
+            nzDuration: 5000,
+          });
+          this.fetchQuestions(); // Reload the lists after deletion
+        },
+        (error: any) => {
+          this.message.error('Failed to delete the question.', {
+            nzDuration: 5000,
+          });
+        }
+      )
+      .add(() => (this.loading = false));
+  }
+
+  // Fetch details for the current exam
   getExamDetails(id: string) {
     this.examService.getExamById(id).subscribe(
       (response: any) => {
         this.exam = response.data;
       },
       (error: any) => {
-        this.message.error(error, { nzDuration: 7000 });
+        this.message.error('Failed to load exam details.', {
+          nzDuration: 5000,
+        });
       }
     );
   }
